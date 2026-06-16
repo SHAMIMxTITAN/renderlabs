@@ -36,6 +36,33 @@ body {
   font-family: 'Outfit', sans-serif;
 }
 
+/* Infinite imagery marquee — seamless loop via -50% on a duplicated set */
+@keyframes rl-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+.rl-marquee-track {
+  animation: rl-marquee 50s linear infinite;
+  will-change: transform;
+}
+.rl-marquee:hover .rl-marquee-track {
+  animation-play-state: paused;
+}
+@media (max-width: 768px) {
+  .rl-marquee-track {
+    animation-duration: 32s;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rl-marquee-track {
+    animation: none;
+  }
+}
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 88px;

@@ -69,3 +69,13 @@ export const WORK = [
     src: "https://customer-assets.emergentagent.com/job_10febd9f-37d9-4310-ad74-a6564a0856a2/artifacts/lchede8p_hf_20260615_095611_dbe72b67-dab2-4bcb-b7d5-6a70adf103a7.mp4",
   },
 ];
+
+// AI Imagery Showcase marquee — add more image URLs here anytime, the marquee
+// auto-duplicates the set and keeps looping seamlessly.
+export const IMAGERY = [
+  "https://customer-assets.emergentagent.com/job_creative-ai-studio-217/artifacts/s2vf81kv_4AF72A20-4B81-4450-9E1C-2200E0681C91.png",
+  "https://customer-assets.emergentagent.com/job_creative-ai-studio-217/artifacts/zw1rizmf_1ACD8A3D-24CC-4CD7-8CB4-C77DE1D97BA3.png",
+  "https://customer-assets.emergentagent.com/job_creative-ai-studio-217/artifacts/ba9030ez_IMG_1398.PNG",
+  "https://customer-assets.emergentagent.com/job_creative-ai-studio-217/artifacts/zvcw5vgl_03285E6A-6ACB-414B-A5A1-5BA5380C8438.png",
+  "https://customer-assets.emergentagent.com/job_creative-ai-studio-217/artifacts/94knb0o8_IMG_7034.JPG",
+];
