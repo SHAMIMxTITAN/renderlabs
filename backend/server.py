@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException
+from fastapi import FastAPI, APIRouter, HTTPException, Query
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -121,8 +121,13 @@ async def create_contact(payload: ContactCreate):
 
 
 @api_router.get("/contact", response_model=List[ContactSubmission])
-async def list_contacts():
-    items = await db.contact_submissions.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+async def list_contacts(limit: int = Query(50, ge=1, le=200), skip: int = Query(0, ge=0)):
+    items = (
+        await db.contact_submissions.find({}, {"_id": 0})
+        .sort("created_at", -1)
+        .skip(skip)
+        .to_list(limit)
+    )
     for it in items:
         if isinstance(it.get('created_at'), str):
             it['created_at'] = datetime.fromisoformat(it['created_at'])
@@ -139,8 +144,10 @@ async def create_status_check(input: StatusCheckCreate):
 
 
 @api_router.get("/status", response_model=List[StatusCheck])
-async def get_status_checks():
-    status_checks = await db.status_checks.find({}, {"_id": 0}).to_list(1000)
+async def get_status_checks(limit: int = Query(50, ge=1, le=200), skip: int = Query(0, ge=0)):
+    status_checks = (
+        await db.status_checks.find({}, {"_id": 0}).skip(skip).to_list(limit)
+    )
     for check in status_checks:
         if isinstance(check['timestamp'], str):
             check['timestamp'] = datetime.fromisoformat(check['timestamp'])
