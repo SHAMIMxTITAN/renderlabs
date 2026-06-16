@@ -1,0 +1,111 @@
+{
+  "theme": "Light",
+  "archetype": "4 (Swiss & High-Contrast) + Luxury Minimalist",
+  "colors": {
+    "background": {
+      "primary": "#FFFFFF",
+      "secondary": "#F7F7F7",
+      "glass": "rgba(255, 255, 255, 0.8)"
+    },
+    "text": {
+      "primary": "#111111",
+      "secondary": "#4B5563",
+      "muted": "#9CA3AF"
+    },
+    "accent": {
+      "primary": "#2563EB",
+      "hover": "#1D4ED8",
+      "subtle": "#EFF6FF"
+    },
+    "border": {
+      "default": "#E5E7EB",
+      "focus": "#2563EB"
+    }
+  },
+  "typography": {
+    "fonts": {
+      "headings": "'Outfit', 'Manrope', sans-serif",
+      "body": "'Inter', sans-serif"
+    },
+    "scales": {
+      "h1": "text-5xl md:text-6xl+ font-bold tracking-tighter leading-tight",
+      "h2": "text-3xl md:text-4xl font-bold tracking-tight leading-snug",
+      "h3": "text-xl md:text-2xl font-semibold tracking-tight",
+      "body": "text-base md:text-lg font-light leading-relaxed",
+      "small": "text-sm font-medium tracking-wide uppercase text-gray-500"
+    },
+    "rules": {
+      "heading_alignment": "left-aligned, explicit hierarchy, tight tracking",
+      "body_alignment": "left-aligned, airy line-height"
+    }
+  },
+  "spacing_and_layout": {
+    "generous_spacing": "Use 2x normal spacing (e.g., py-24 or py-32 for sections, gap-8 or gap-12 for grids).",
+    "container": "max-w-7xl mx-auto px-6 md:px-12",
+    "grids": {
+      "services": "grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12",
+      "portfolio": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+    },
+    "radii": "rounded-2xl for main cards/media, rounded-full for buttons/badges",
+    "shadows": "Minimal. Use subtle 1px borders (border-gray-200) instead of heavy shadows to maintain a flat, premium look."
+  },
+  "components": {
+    "navbar": "Sticky header with backdrop-blur-xl, bg-white/80, 1px bottom border on scroll. Logo left, links center/right, small rounded-full accent CTA right.",
+    "buttons": "Primary: bg-blue-600 text-white rounded-full px-6 py-3 font-medium transition-transform hover:scale-105 hover:bg-blue-700. Secondary: bg-gray-100 text-gray-900 rounded-full px-6 py-3 hover:bg-gray-200.",
+    "cards": "Services cards should be flat, bg-gray-50/50 or bg-white, 1px border-gray-100, large internal padding (p-10), left-aligned text, crisp icons.",
+    "inputs": "Shadcn/UI derived: h-12 bg-gray-50 border-gray-200 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 rounded-xl"
+  },
+  "motion_and_interactions": {
+    "scroll_animations": "Use framer-motion for subtle slide-up (y: 20 -> y: 0) and fade-in (opacity: 0 -> 1) on scroll for all major sections.",
+    "hover_states": "Images slightly scale up inside overflow-hidden containers. Buttons lift and darken slightly.",
+    "page_feel": "Implement smooth momentum scrolling if possible, otherwise rely on buttery smooth CSS/framer-motion transitions (duration 0.5s, ease-out)."
+  },
+  "media_assets": {
+    "logo": {
+      "main": "https://customer-assets.emergentagent.com/job_10febd9f-37d9-4310-ad74-a6564a0856a2/artifacts/m2o6wl7u_A_futuristic_SLA_MSLA_resin_printer_202606150240.jpeg",
+      "description": "Monochrome black 'R' rendered inside a white futuristic resin printer. Use for Navbar and Footer."
+    },
+    "hero_video_placeholder": {
+      "url": "https://images.unsplash.com/photo-1491895200222-0fc4a4c35e18?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2OTF8MHwxfHNlYXJjaHwyfHx3aGl0ZSUyMGdlb21ldHJpYyUyMGFic3RyYWN0JTIwM2R8ZW58MHx8fHwxNzgxNjAyNzI5fDA&ixlib=rb-4.1.0&q=85",
+      "description": "White and gray optical illusion used as a placeholder for the muted autoplay looping motion-design video banner."
+    },
+    "portfolio_gallery": [
+      {
+        "url": "https://images.unsplash.com/photo-1627637819794-fba32f82be16?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1OTN8MHwxfHNlYXJjaHw0fHxhYnN0cmFjdCUyMDNkJTIwcmVuZGVyJTIwbWluaW1hbHxlbnwwfHx8fDE3ODE2MDI3MjR8MA&ixlib=rb-4.1.0&q=85",
+        "title": "Abstract Motion Graphics",
+        "category": "Video Editing"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1622737133809-d95047b9e673?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1OTN8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMDNkJTIwcmVuZGVyJTIwbWluaW1hbHxlbnwwfHx8fDE3ODE2MDI3MjR8MA&ixlib=rb-4.1.0&q=85",
+        "title": "3D Floating Elements",
+        "category": "AI Motion Graphics"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1622547748225-3fc4abd2cca0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1OTN8MHwxfHNlYXJjaHwyfHxhYnN0cmFjdCUyMDNkJTIwcmVuZGVyJTIwbWluaW1hbHxlbnwwfHx8fDE3ODE2MDI3MjR8MA&ixlib=rb-4.1.0&q=85",
+        "title": "Creative Landing Pages",
+        "category": "Web Design"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1OTN8MHwxfHNlYXJjaHwzfHxhYnN0cmFjdCUyMDNkJTIwcmVuZGVyJTIwbWluaW1hbHxlbnwwfHx8fDE3ODE2MDI3MjR8MA&ixlib=rb-4.1.0&q=85",
+        "title": "Realistic AI Renders",
+        "category": "AI Imagery"
+      }
+    ]
+  },
+  "contact_details": {
+    "name": "Shamim Chaudhary",
+    "email": "blake@renderlabhq.com",
+    "phone": "+91 88502 53204",
+    "social": "Instagram"
+  },
+  "instructions_to_main_agent": [
+    "Use framer-motion heavily for smooth entrance animations (staggered children fade in).",
+    "Import fonts 'Outfit' or 'Manrope' for headings and 'Inter' for body text via Google Fonts.",
+    "Do NOT use typical SaaS shadows (no shadow-md or shadow-xl). Use crisp borders and flat backgrounds for a minimalist high-end feel.",
+    "Implement Lucide React icons for the Services section.",
+    "Implement a Lightbox modal component (or use a library like react-image-lightbox/framer-motion AnimatePresence) for the Work/Portfolio grid items.",
+    "Ensure the Hero video placeholder image acts as a contained banner on the right side or bottom, elegantly framed with rounded-2xl corners, not a full screen background.",
+    "Use <form> for the Contact section with standard accessible Inputs and Textarea from shadcn/ui.",
+    "Add data-testid attributes to all key interactive elements (buttons, inputs, links) to support automated testing."
+  ]
+}
