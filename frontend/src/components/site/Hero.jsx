@@ -37,7 +37,9 @@ const mobileWord = {
 
 export const Hero = () => {
   const ref = useRef(null);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches
+  );
 
   useEffect(() => {
     const m = window.matchMedia("(max-width: 768px)");
@@ -97,6 +99,7 @@ export const Hero = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/15 to-black/75" />
 
         <motion.div
+          key={isMobile ? "m" : "d"}
           {...mobileWrap}
           className="relative z-10 h-screen flex flex-col items-center justify-center text-center px-6"
         >
@@ -114,7 +117,7 @@ export const Hero = () => {
             {WORDS.map((w, i) =>
               isMobile ? (
                 <motion.span
-                  key={i}
+                  key={`m-${i}`}
                   variants={mobileWord}
                   className={`inline-block mr-[0.28em] ${w.accent ? "text-[#3b82f6]" : "text-white"}`}
                 >
@@ -122,7 +125,7 @@ export const Hero = () => {
                 </motion.span>
               ) : (
                 <ScrollWord
-                  key={i}
+                  key={`d-${i}`}
                   accent={w.accent}
                   progress={scrollYProgress}
                   start={0.06 + i * 0.05}

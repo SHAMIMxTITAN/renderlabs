@@ -1,0 +1,24 @@
+{
+  "summary": "Re-tested ONLY the mobile hero reveal fix and desktop scroll-reveal regression in Hero.jsx per main agent's request. All 4 specified checks PASS. Mobile (390x844): after 3.5s wait, all 8 headline spans opacity=1.0, subtitle <p> opacity=1.0, CTA wrapper (View Work / Start a project) opacity=1.0; nav-mobile-toggle opens menu with 4 nav-mobile-link-* entries and nav-mobile-cta visible. Desktop (1440x900) regression: at scrollY=0 all 8 headline spans opacity=0 (hidden as expected); after scrollTo(900) all 8 headline spans opacity=1 — scroll-linked word reveal still works. Fix verified: isMobile initialized synchronously from window.matchMedia, key={isMobile?'m':'d'} on wrapper, and distinct m-/d- keys on words successfully prevent framer-motion from retaining the previous motion-value opacity binding.",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Hero.jsx line 72-74: mobileWrap is rebuilt on every render; cheap object so fine, but could be memoized for clarity.",
+    "Hero.jsx still references `[data-testid=\"hero\"] p` only once — fine for tests, but if a second <p> is added later, ensure the subtitle keeps a stable selector.",
+    "Prior comments from iteration_2 (FastAPI shutdown event deprecation, CORS allow_credentials with '*', Contact.jsx error swallowing) still open but out of scope for this iteration."
+  ],
+  "updated_files": [],
+  "success_rate": { "backend": "not retested (out of scope)", "frontend": "100% (4/4 specified checks)" },
+  "test_credentials": "N/A - public landing page",
+  "seed_data_creation": "None this iteration",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Mobile hero reveal fix is confirmed working. Desktop scroll reveal of headline words is intact (0 at scrollY=0, 1 at scrollY=900). No regressions detected in scope. Remaining open backlog comments are from iteration_2 (non-blocking).",
+  "rca of the issue": "Resolved in this iteration. Root cause was: (1) isMobile initialized to false on first paint, causing framer-motion to bind useTransform(scrollYProgress) opacity=0 to the subtitle/buttons DOM nodes on desktop branch, then (2) when isMobile flipped true the same DOM nodes were reused (same React keys) so framer-motion retained the previous motion-value binding holding opacity at 0. The fix initializes isMobile synchronously via window.matchMedia, adds key={isMobile?'m':'d'} to the wrapping motion.div (forcing a clean remount), and gives mobile vs desktop word spans distinct keys (m-${i} vs d-${i}). All three together guarantee a fresh motion subtree on mobile that uses variant-driven fade-in instead of inheriting scroll-linked opacity."
+}
