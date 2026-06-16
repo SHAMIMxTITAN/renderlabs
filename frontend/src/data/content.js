@@ -78,4 +78,8 @@ export const IMAGERY = [
   "https://customer-assets.emergentagent.com/job_creative-ai-studio-217/artifacts/ba9030ez_IMG_1398.PNG",
   "https://customer-assets.emergentagent.com/job_creative-ai-studio-217/artifacts/zvcw5vgl_03285E6A-6ACB-414B-A5A1-5BA5380C8438.png",
   "https://customer-assets.emergentagent.com/job_creative-ai-studio-217/artifacts/94knb0o8_IMG_7034.JPG",
+  "https://customer-assets.emergentagent.com/job_creative-ai-studio-217/artifacts/na64pjwe_70CC0CA1-7F8F-4577-949E-1196EF4F4517.jpeg",
+  "https://customer-assets.emergentagent.com/job_creative-ai-studio-217/artifacts/jpiyca8y_IMG_7031.JPG",
+  "https://customer-assets.emergentagent.com/job_creative-ai-studio-217/artifacts/g2gq53yy_Iris%20Male%20Lifestyle%20%281%29.png",
+  "https://customer-assets.emergentagent.com/job_creative-ai-studio-217/artifacts/ljc5xwvp_38D16AEB-661D-420A-8962-7800D1CBE194.png",
 ];
