@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
-import { Logo } from "./Logo";
+import { LOGO } from "@/data/content";
 import { MagneticButton } from "./MagneticButton";
 
 const LINKS = [
@@ -23,8 +23,14 @@ export const Navbar = () => {
 
   const go = (href) => {
     setOpen(false);
-    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+    const el = document.querySelector(href);
+    if (!el) return;
+    if (window.lenis) window.lenis.scrollTo(el, { offset: -80 });
+    else el.scrollIntoView({ behavior: "smooth" });
   };
+
+  // Over the hero video links/logo are light; once scrolled they go dark.
+  const onDark = !scrolled;
 
   return (
     <header
@@ -36,7 +42,14 @@ export const Navbar = () => {
       }`}
     >
       <nav className="max-w-7xl mx-auto px-6 md:px-12 h-[72px] flex items-center justify-between">
-        <Logo />
+        <button onClick={() => go("#home")} data-testid="nav-logo" className="flex items-center gap-3 group">
+          <span className="overflow-hidden rounded-lg ring-1 ring-black/5 shrink-0" style={{ width: 36, height: 36 }}>
+            <img src={LOGO} alt="Renderlabs logo" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+          </span>
+          <span className={`font-display font-bold tracking-tight text-lg transition-colors ${onDark ? "text-white" : "text-[#111111]"}`}>
+            Renderlabs
+          </span>
+        </button>
 
         <div className="hidden md:flex items-center gap-9">
           {LINKS.map((l) => (
@@ -44,7 +57,9 @@ export const Navbar = () => {
               key={l.href}
               data-testid={`nav-link-${l.label.toLowerCase()}`}
               onClick={() => go(l.href)}
-              className="text-sm font-medium text-[#4b5563] hover:text-[#111111] transition-colors"
+              className={`text-sm font-medium transition-colors ${
+                onDark ? "text-white/80 hover:text-white" : "text-[#4b5563] hover:text-[#111111]"
+              }`}
             >
               {l.label}
             </button>
@@ -65,7 +80,7 @@ export const Navbar = () => {
         <button
           data-testid="nav-mobile-toggle"
           onClick={() => setOpen((v) => !v)}
-          className="md:hidden text-[#111111] p-2"
+          className={`md:hidden p-2 transition-colors ${onDark ? "text-white" : "text-[#111111]"}`}
           aria-label="Toggle menu"
         >
           {open ? <X size={22} /> : <Menu size={22} />}

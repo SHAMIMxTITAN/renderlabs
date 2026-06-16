@@ -1,0 +1,41 @@
+{
+  "summary": "Re-tested Renderlabs after major hero/animation refactor. Backend: 7/7 pytest passing (validation, CRUD, persistence). Desktop frontend: ALL flows pass — scroll-linked headline reveal (opacity 0 at scrollY=0, 1 at scrollY=800), button reveal at scrollY=1400, transparent→frosted navbar transition, kinetic divider present, 4 service cards, 4 work items with playable lightbox, imagery marquee = 18 cards, About count-up reaches '4 crafts', Contact form submits (200) and clears fields with success toast, all contact hrefs correct, smooth Lenis scrolling on nav-link-* and hero-view-work. Mobile (375px): nav-mobile-toggle opens menu with all 4 links + CTA, layout not broken, no horizontal overflow, but HERO HEADLINE/SUBTITLE/BUTTONS stuck at opacity 0 (mobile fade-in animation not running) — spec requires headline visible on mobile.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "Hero.jsx (mobile <=768px)",
+        "issue": "Headline words, subtitle <p>, and CTA buttons (View Work / Start a project) remain at opacity 0 after page load on mobile. Spec requires headline to be visible via a fade-in. Only the 'AI-Powered Creative Studio' badge animates correctly.",
+        "selector": "[data-testid=\"hero\"] h1 span, [data-testid=\"hero\"] p, [data-testid=\"hero-view-work\"] (parent wrapper)",
+        "priority": "HIGH"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_contact_api.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "Fix mobile hero animation in /app/frontend/src/components/site/Hero.jsx. Root cause: on first render isMobile=false, so <motion.p>/<motion.div>/ScrollWord apply inline style={{ opacity: subOpacity/btnOpacity, y: ... }} or useTransform-driven opacity (=0 at scrollY=0). After useEffect sets isMobile=true, the new render passes style={} + variants={mobileWord}, but Framer Motion retains the previous motion-value-bound opacity on the same DOM nodes, leaving them at 0. The headline spans switch component type (ScrollWord -> motion.span) under the same React key, which compounds the issue. Suggested fixes: (a) gate the entire JSX on a known isMobile (default to true via window.matchMedia in useState initializer to avoid first-paint mismatch, e.g. `useState(() => typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches)`), or (b) give the mobile branch unique React keys (e.g. `key={`m-${i}`}` vs `key={`d-${i}`}`) so motion remounts cleanly, or (c) on mobile drop style={} entirely and rely solely on variants + force animation restart via key on the wrapping motion.div."
+  ],
+  "critical_code_review_comments": [
+    "Hero.jsx: isMobile is initialized to false then flipped in useEffect, causing a first-paint mismatch where desktop scroll-linked motion values bind opacity:0 to the same DOM nodes that are supposed to fade in on mobile. Initialize with window.matchMedia at useState init time.",
+    "Hero.jsx: Same React key (key={i}) is reused between ScrollWord (desktop) and motion.span (mobile) — switching variant strategies under the same key prevents framer-motion from cleanly re-initializing animation state.",
+    "server.py: CORS allow_credentials=True + allow_origins='*' still present (not spec-compliant); harmless today (no cookies/auth) but tighten when adding auth.",
+    "server.py: @app.on_event('shutdown') is deprecated in FastAPI — migrate to the lifespan context.",
+    "Contact.jsx: axios catch swallows server response details — log err.response?.data for easier debugging."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% (7/7)", "frontend": "92% (13/14 critical flows; mobile hero reveal failing)"},
+  "test_credentials": "N/A - public landing page",
+  "seed_data_creation": "TEST_UI_* contact submissions created via POST /api/contact during UI test; persisted in MongoDB and visible via GET /api/contact.",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend regression and desktop UI are stable. The single open issue is the mobile (<=768px) hero reveal animation: badge animates but headline spans, subtitle <p>, and CTA button wrapper stay at opacity 0. Use viewport 375x844, wait 3.5s, then assert opacity of [data-testid=\"hero\"] h1 span > 0.9. After fix, re-run only this mobile check (rest of the app is unaffected).",
+  "rca of the issue": "Hero.jsx renders different JSX branches based on `isMobile`. isMobile starts as false (useState default), then useEffect flips it to true on mobile devices. During the first render (isMobile=false), the subtitle and button container receive an inline style with motion-value opacity (subOpacity/btnOpacity from useTransform of scrollYProgress, which is 0 at scrollY=0). When isMobile becomes true, the JSX changes to `style={}` and `variants={mobileWord}`, but Framer Motion has already attached the motion-value opacity binding to the same DOM node and does not release it — the final inline style on the element keeps the opacity at 0. The same defect affects headline words because they swap between ScrollWord (useTransform-driven) and motion.span (variant-driven) under identical React keys. Reproduction: open the site at 375x844, wait 3+ seconds, the headline 'Editing, imagery, motion & web — by AI.', subtitle, and 'View Work / Start a project' buttons are not visible. Mitigation: initialize isMobile from matchMedia synchronously in useState, OR use distinct React keys for mobile vs desktop spans, OR force a remount via `key={isMobile ? 'm' : 'd'}` on the wrapping motion.div."
+}

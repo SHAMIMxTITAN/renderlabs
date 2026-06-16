@@ -8,7 +8,7 @@ export const Work = () => {
   const [active, setActive] = useState(null);
 
   return (
-    <section id="work" data-testid="work" className="py-28 md:py-44 bg-white">
+    <section id="work" data-testid="work" className="py-20 md:py-32 bg-white">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <Reveal>
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
@@ -16,7 +16,7 @@ export const Work = () => {
               <p className="text-sm font-medium tracking-wide uppercase text-[#9ca3af] mb-4">
                 Selected work
               </p>
-              <h2 className="font-display font-bold tracking-[-0.03em] text-[#111111] text-3xl md:text-5xl leading-[1.03]">
+              <h2 className="font-display font-extrabold tracking-[-0.03em] text-[#111111] text-4xl md:text-6xl leading-[0.98]">
                 Things we've rendered.
               </h2>
             </div>
@@ -26,7 +26,7 @@ export const Work = () => {
           </div>
         </Reveal>
 
-        <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-7">
+        <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
           {WORK.map((w, i) => (
             <Reveal key={w.id} delay={i * 0.06}>
               <button

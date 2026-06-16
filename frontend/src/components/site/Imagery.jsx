@@ -9,14 +9,14 @@ export const Imagery = () => {
     <section
       id="imagery"
       data-testid="imagery"
-      className="py-28 md:py-44 bg-white overflow-hidden"
+      className="py-20 md:py-32 bg-white overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <Reveal>
           <p className="text-sm font-medium tracking-wide uppercase text-[#9ca3af] mb-4">
             AI Imagery
           </p>
-          <h2 className="font-display font-bold tracking-[-0.03em] text-[#111111] text-3xl md:text-5xl leading-[1.03]">
+          <h2 className="font-display font-extrabold tracking-[-0.03em] text-[#111111] text-4xl md:text-6xl leading-[0.98]">
             Shot entirely by AI.
           </h2>
           <p className="mt-5 max-w-2xl text-lg font-light leading-relaxed text-[#4b5563]">

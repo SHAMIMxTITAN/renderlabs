@@ -35,20 +35,29 @@ export const Contact = () => {
     "w-full h-12 rounded-xl bg-[#f7f7f7] border border-[#e5e7eb] px-4 text-[#111111] placeholder:text-[#9ca3af] outline-none transition-all focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb] focus:bg-white";
 
   return (
-    <section id="contact" data-testid="contact" className="py-28 md:py-44 bg-white">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 grid lg:grid-cols-2 gap-14 lg:gap-20">
+    <section id="contact" data-testid="contact" className="py-20 md:py-32 bg-white">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 grid lg:grid-cols-2 gap-14 lg:gap-20 items-start">
         <Reveal>
-          <p className="text-sm font-medium tracking-wide uppercase text-[#9ca3af] mb-4">
+          <p className="text-sm font-medium tracking-wide uppercase text-[#9ca3af] mb-5">
             Contact
           </p>
-          <h2 className="font-display font-bold tracking-tight text-[#111111] text-3xl md:text-5xl leading-[1.05]">
+          <h2 className="font-display font-extrabold tracking-[-0.04em] text-[#111111] text-5xl md:text-7xl leading-[0.95]">
             Let's make
             <br />
-            something great.
+            something
+            <br />
+            <span className="text-[#2563eb]">great.</span>
           </h2>
-          <p className="mt-6 text-lg font-light text-[#4b5563] max-w-md">
-            Tell us about your project. We typically reply within a day.
-          </p>
+
+          <div className="mt-8 inline-flex items-center gap-2.5 rounded-full border border-[#e5e7eb] bg-[#f7f7f7] px-4 py-2">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75" />
+              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-500" />
+            </span>
+            <span className="text-sm font-medium text-[#111111]">
+              Currently taking new projects
+            </span>
+          </div>
 
           <div className="mt-10 space-y-1 border-t border-[#e5e7eb] pt-8">
             <div className="py-3" data-testid="contact-name">
