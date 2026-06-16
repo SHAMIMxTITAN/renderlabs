@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Logo } from "./Logo";
+import { MagneticButton } from "./MagneticButton";
 
 const LINKS = [
   { label: "Work", href: "#work" },
@@ -51,13 +52,14 @@ export const Navbar = () => {
         </div>
 
         <div className="hidden md:block">
-          <button
+          <MagneticButton
             data-testid="nav-cta"
             onClick={() => go("#contact")}
-            className="rounded-full bg-[#2563eb] hover:bg-[#1d4ed8] text-white text-sm font-medium px-5 py-2.5 transition-all hover:scale-[1.03]"
+            strength={0.5}
+            className="rounded-full bg-[#2563eb] hover:bg-[#1d4ed8] text-white text-sm font-medium px-5 py-2.5 transition-colors"
           >
             Get in touch
-          </button>
+          </MagneticButton>
         </div>
 
         <button

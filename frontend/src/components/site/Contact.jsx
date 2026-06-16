@@ -35,7 +35,7 @@ export const Contact = () => {
     "w-full h-12 rounded-xl bg-[#f7f7f7] border border-[#e5e7eb] px-4 text-[#111111] placeholder:text-[#9ca3af] outline-none transition-all focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb] focus:bg-white";
 
   return (
-    <section id="contact" data-testid="contact" className="py-24 md:py-32 bg-white">
+    <section id="contact" data-testid="contact" className="py-28 md:py-44 bg-white">
       <div className="max-w-7xl mx-auto px-6 md:px-12 grid lg:grid-cols-2 gap-14 lg:gap-20">
         <Reveal>
           <p className="text-sm font-medium tracking-wide uppercase text-[#9ca3af] mb-4">

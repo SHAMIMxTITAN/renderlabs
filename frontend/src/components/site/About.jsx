@@ -7,7 +7,7 @@ const STATS = [
 ];
 
 export const About = () => (
-  <section id="about" data-testid="about" className="py-24 md:py-32 bg-[#f7f7f7]">
+  <section id="about" data-testid="about" className="py-28 md:py-44 bg-[#f7f7f7]">
     <div className="max-w-7xl mx-auto px-6 md:px-12 grid lg:grid-cols-12 gap-12">
       <div className="lg:col-span-4">
         <Reveal>
