@@ -79,6 +79,7 @@ export const Hero = () => {
               loop
               playsInline
               preload="auto"
+              poster="https://images.unsplash.com/photo-1491895200222-0fc4a4c35e18?crop=entropy&cs=srgb&fm=jpg&q=70&w=1000"
               className="w-full h-full object-cover"
             />
             <div className="absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full bg-white/85 backdrop-blur px-3.5 py-1.5">
