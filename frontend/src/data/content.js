@@ -52,7 +52,7 @@ export const WORK = [
     title: "Footwear Render Loop",
     category: "Realistic AI Images",
     type: "video",
-    src: "https://customer-assets.emergentagent.com/job_10febd9f-37d9-4310-ad74-a6564a0856a2/artifacts/43dby112_shoe%20v2.mp4",
+    src: "/hero-video.mp4",
   },
   {
     id: "w3",
