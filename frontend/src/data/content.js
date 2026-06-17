@@ -2,7 +2,7 @@ export const LOGO =
   "https://customer-assets.emergentagent.com/job_10febd9f-37d9-4310-ad74-a6564a0856a2/artifacts/m2o6wl7u_A_futuristic_SLA_MSLA_resin_printer_202606150240.jpeg";
 
 export const HERO_VIDEO =
-  "https://customer-assets.emergentagent.com/job_10febd9f-37d9-4310-ad74-a6564a0856a2/artifacts/43dby112_shoe%20v2.mp4";
+  "/hero-video.mp4";
 
 export const CONTACT = {
   name: "Shamim Chaudhary",
