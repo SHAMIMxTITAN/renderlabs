@@ -36,7 +36,7 @@ export const About = () => (
       <div className="lg:col-span-5">
         <Reveal>
           <p className="text-sm font-medium tracking-wide uppercase text-[#9ca3af] mb-8">
-            About Renderlabs
+            About Renderlab
           </p>
         </Reveal>
         <div className="space-y-8 border-t border-[#e5e7eb] pt-8">
@@ -56,7 +56,7 @@ export const About = () => (
       <div className="lg:col-span-7">
         <Reveal delay={0.05}>
           <h2 className="font-display font-extrabold tracking-[-0.03em] text-[#111111] text-3xl md:text-5xl leading-[1.05]">
-            Renderlabs blends cutting-edge AI tools with real creative
+            Renderlab blends cutting-edge AI tools with real creative
             direction — delivering high-quality visual content and web pages,
             <span className="text-[#2563eb]"> fast.</span>
           </h2>
