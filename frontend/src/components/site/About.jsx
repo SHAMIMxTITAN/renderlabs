@@ -4,7 +4,7 @@ import { Reveal } from "./Reveal";
 
 const CountUp = ({ to, duration = 1200 }) => {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const inView = useInView(ref, { once: true, margin: "0px" });
   const [n, setN] = useState(0);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const CountUp = ({ to, duration = 1200 }) => {
     return () => cancelAnimationFrame(raf);
   }, [inView, to, duration]);
 
-  return <span ref={ref}>{n}</span>;
+  return <span ref={ref}>{inView ? n : 0}</span>;
 };
 
 const STATS = [
