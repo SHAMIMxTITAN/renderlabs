@@ -46,7 +46,7 @@ export const Footer = () => (
 
       <div className="mt-12 pt-8 border-t border-white/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <p className="text-sm text-white/45">
-          © {new Date().getFullYear()} Renderlabs. All rights reserved.
+          © {new Date().getFullYear()} Renderlab. All rights reserved.
         </p>
         <p className="text-sm text-white/45">Crafted with AI + creative direction.</p>
       </div>
