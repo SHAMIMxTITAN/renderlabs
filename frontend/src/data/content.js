@@ -9,7 +9,7 @@ export const CONTACT = {
   email: "blake@renderlabhq.com",
   phone: "+91 88502 53204",
   phoneHref: "+918850253204",
-  instagram: "https://www.instagram.com/renderlabshq/",
+  instagram: "https://www.instagram.com/renderlabhq/",
 };
 
 export const SERVICES = [
