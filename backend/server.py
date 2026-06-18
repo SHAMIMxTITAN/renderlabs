@@ -75,14 +75,14 @@ def build_email_html(name: str, email: str, message: str) -> str:
     <table width="100%" cellpadding="0" cellspacing="0" style="font-family: Arial, Helvetica, sans-serif; background:#f7f7f7; padding:24px;">
       <tr><td>
         <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px; margin:0 auto; background:#ffffff; border:1px solid #e5e7eb; border-radius:16px; overflow:hidden;">
-          <tr><td style="background:#111111; padding:20px 28px; color:#ffffff; font-size:18px; font-weight:bold;">Renderlabs — New Inquiry</td></tr>
+          <tr><td style="background:#111111; padding:20px 28px; color:#ffffff; font-size:18px; font-weight:bold;">Renderlab — New Inquiry</td></tr>
           <tr><td style="padding:28px;">
             <p style="margin:0 0 12px; color:#111111; font-size:14px;"><strong>Name:</strong> {name}</p>
             <p style="margin:0 0 12px; color:#111111; font-size:14px;"><strong>Email:</strong> <a href="mailto:{email}" style="color:#2563EB;">{email}</a></p>
             <p style="margin:0 0 8px; color:#111111; font-size:14px;"><strong>Message:</strong></p>
             <p style="margin:0; color:#4b5563; font-size:14px; line-height:1.6;">{safe_message}</p>
           </td></tr>
-          <tr><td style="padding:16px 28px; border-top:1px solid #e5e7eb; color:#9ca3af; font-size:12px;">Sent from the Renderlabs website contact form.</td></tr>
+          <tr><td style="padding:16px 28px; border-top:1px solid #e5e7eb; color:#9ca3af; font-size:12px;">Sent from the Renderlab website contact form.</td></tr>
         </table>
       </td></tr>
     </table>
@@ -107,7 +107,7 @@ async def create_contact(payload: ContactCreate):
             "from": SENDER_EMAIL,
             "to": [CONTACT_RECIPIENT],
             "reply_to": payload.email,
-            "subject": f"New Renderlabs inquiry from {payload.name}",
+            "subject": f"New Renderlab inquiry from {payload.name}",
             "html": build_email_html(payload.name, payload.email, payload.message),
         }
         try:
