@@ -7,14 +7,14 @@ import { MagneticButton } from "./MagneticButton";
 const EASE = [0.22, 1, 0.36, 1];
 
 const WORDS = [
-  { t: "Editing," },
-  { t: "imagery," },
-  { t: "motion" },
-  { t: "&" },
-  { t: "web" },
-  { t: "—" },
-  { t: "by", accent: true },
-  { t: "AI.", accent: true },
+  { t: "Visuals" },
+  { t: "that" },
+  { t: "make" },
+  { t: "your" },
+  { t: "brand" },
+  { t: "impossible" },
+  { t: "to", accent: true },
+  { t: "ignore.", accent: true },
 ];
 
 const ScrollWord = ({ children, accent, progress, start, end }) => {
@@ -109,7 +109,7 @@ export const Hero = () => {
           >
             <span className="h-1.5 w-1.5 rounded-full bg-[#3b82f6]" />
             <span className="text-xs font-medium tracking-wide uppercase text-white/90">
-              AI-Powered Creative Studio
+              Creative Studio for Brands & Businesses
             </span>
           </motion.div>
 
@@ -142,8 +142,8 @@ export const Hero = () => {
             style={isMobile ? {} : { opacity: subOpacity, y: subY }}
             className="mt-8 max-w-xl text-lg font-light leading-relaxed text-white/80"
           >
-            AI-driven editing, imagery, motion, and web design — crafted with
-            real creative direction for high-end brands.
+            Video, imagery, motion, and landing pages — crafted with real
+            creative direction for brands and businesses that want to stand out.
           </motion.p>
 
           <motion.div
