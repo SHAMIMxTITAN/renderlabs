@@ -25,7 +25,7 @@ const CountUp = ({ to, duration = 1200 }) => {
 };
 
 const STATS = [
-  { value: <>Concept to delivery</>, label: "Production pipeline" },
+  { value: <>AI + craft</>, label: "Production pipeline" },
   { value: (<><CountUp to={4} /> crafts</>), label: "Under one roof" },
   { value: <>Fast</>, label: "Turnaround" },
 ];
