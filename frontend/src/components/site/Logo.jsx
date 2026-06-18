@@ -12,7 +12,7 @@ export const Logo = ({ size = 36, showWord = true, light = false }) => (
     >
       <img
         src={LOGO}
-        alt="Renderlabs logo"
+        alt="Renderlab logo"
         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
       />
     </span>
@@ -22,7 +22,7 @@ export const Logo = ({ size = 36, showWord = true, light = false }) => (
           light ? "text-white" : "text-[#111111]"
         }`}
       >
-        Renderlabs
+        Renderlab
       </span>
     )}
   </a>
