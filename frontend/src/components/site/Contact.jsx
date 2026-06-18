@@ -90,7 +90,7 @@ export const Contact = () => {
               className="flex items-center gap-3 py-3 text-[#111111] hover:text-[#2563eb] transition-colors group"
             >
               <Instagram size={18} className="text-[#2563eb]" />
-              <span className="font-medium">@renderlabshq</span>
+              <span className="font-medium">@renderlabhq</span>
               <ArrowRight size={15} className="opacity-0 -translate-x-1 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
             </a>
           </div>
