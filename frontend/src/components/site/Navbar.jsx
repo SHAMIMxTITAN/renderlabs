@@ -44,10 +44,10 @@ export const Navbar = () => {
       <nav className="max-w-7xl mx-auto px-6 md:px-12 h-[72px] flex items-center justify-between">
         <button onClick={() => go("#home")} data-testid="nav-logo" className="flex items-center gap-3 group">
           <span className="overflow-hidden rounded-lg ring-1 ring-black/5 shrink-0" style={{ width: 36, height: 36 }}>
-            <img src={LOGO} alt="Renderlabs logo" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <img src={LOGO} alt="Renderlab logo" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
           </span>
           <span className={`font-display font-bold tracking-tight text-lg transition-colors ${onDark ? "text-white" : "text-[#111111]"}`}>
-            Renderlabs
+            Renderlab
           </span>
         </button>
 
