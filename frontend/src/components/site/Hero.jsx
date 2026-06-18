@@ -7,13 +7,8 @@ import { MagneticButton } from "./MagneticButton";
 const EASE = [0.22, 1, 0.36, 1];
 
 const WORDS = [
-  { t: "Visuals" },
-  { t: "that" },
-  { t: "make" },
-  { t: "your" },
-  { t: "brand" },
-  { t: "impossible" },
-  { t: "to", accent: true },
+  { t: "Impossible" },
+  { t: "to" },
   { t: "ignore.", accent: true },
 ];
 
@@ -109,7 +104,7 @@ export const Hero = () => {
           >
             <span className="h-1.5 w-1.5 rounded-full bg-[#3b82f6]" />
             <span className="text-xs font-medium tracking-wide uppercase text-white/90">
-              Creative Studio for Brands & Businesses
+              Creative Studio for Brands
             </span>
           </motion.div>
 
@@ -143,7 +138,7 @@ export const Hero = () => {
             className="mt-8 max-w-xl text-lg font-light leading-relaxed text-white/80"
           >
             Video, imagery, motion, and landing pages — crafted with real
-            creative direction for brands and businesses that want to stand out.
+            creative direction for brands and businesses.
           </motion.p>
 
           <motion.div
