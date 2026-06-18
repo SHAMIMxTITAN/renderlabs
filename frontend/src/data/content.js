@@ -5,7 +5,7 @@ export const HERO_VIDEO =
   "/hero-video.mp4";
 
 export const CONTACT = {
-  name: "Shamim Chaudhary",
+  name: "Shamim Chaudhary (Blake)",
   email: "blake@renderlabhq.com",
   phone: "+91 88502 53204",
   phoneHref: "+918850253204",
