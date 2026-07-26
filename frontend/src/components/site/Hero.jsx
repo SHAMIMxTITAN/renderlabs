@@ -6,6 +6,8 @@ import { MagneticButton } from "./MagneticButton";
 
 const EASE = [0.22, 1, 0.36, 1];
 
+const HERO_POSTER = "/hero-poster.webp";
+
 const WORDS = [
   { t: "Impossible" },
   { t: "to" },
@@ -49,12 +51,18 @@ export const Hero = () => {
     offset: ["start start", "end end"],
   });
 
-  const videoScale = useTransform(scrollYProgress, [0, 1], [1.05, 0.9]);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.82, 1], [1, 1, 0]);
-  const subOpacity = useTransform(scrollYProgress, [0.5, 0.64], [0, 1]);
-  const subY = useTransform(scrollYProgress, [0.5, 0.64], [24, 0]);
-  const btnOpacity = useTransform(scrollYProgress, [0.6, 0.74], [0, 1]);
-  const btnY = useTransform(scrollYProgress, [0.6, 0.74], [24, 0]);
+  // Video only ever scales UP. Going below 1 pulls it off the edges and
+  // exposes the page behind it, which is what caused the visible square.
+  const videoScale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
+
+  // Hero fades out underneath the incoming section.
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1, 0]);
+
+  // All copy lands before the overlap begins at ~0.375.
+  const subOpacity = useTransform(scrollYProgress, [0.19, 0.27], [0, 1]);
+  const subY = useTransform(scrollYProgress, [0.19, 0.27], [24, 0]);
+  const btnOpacity = useTransform(scrollYProgress, [0.26, 0.34], [0, 1]);
+  const btnY = useTransform(scrollYProgress, [0.26, 0.34], [24, 0]);
   const scrollOpacity = useTransform(scrollYProgress, [0, 0.06], [1, 0]);
 
   const scrollTo = (href) => {
@@ -73,24 +81,33 @@ export const Hero = () => {
       ref={ref}
       id="home"
       data-testid="hero"
-      className={isMobile ? "relative h-screen" : "relative h-[230vh]"}
+      className={isMobile ? "relative z-0 h-screen" : "relative z-0 h-[260vh]"}
     >
       <motion.div
         style={{ opacity: isMobile ? 1 : heroOpacity }}
-        className={`${isMobile ? "relative" : "sticky top-0"} h-screen w-full overflow-hidden`}
+        className={`${isMobile ? "relative" : "sticky top-0"} h-screen w-full overflow-hidden bg-black`}
       >
-        <motion.video
-          data-testid="hero-video"
-          src={HERO_VIDEO}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          poster="https://images.unsplash.com/photo-1491895200222-0fc4a4c35e18?crop=entropy&cs=srgb&fm=jpg&q=70&w=1400"
-          style={{ scale: isMobile ? 1 : videoScale }}
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+        {isMobile ? (
+          <img
+            src={HERO_POSTER}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        ) : (
+          <motion.video
+            data-testid="hero-video"
+            src={HERO_VIDEO}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            poster={HERO_POSTER}
+            style={{ scale: videoScale }}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/15 to-black/75" />
 
         <motion.div
@@ -123,8 +140,8 @@ export const Hero = () => {
                   key={`d-${i}`}
                   accent={w.accent}
                   progress={scrollYProgress}
-                  start={0.06 + i * 0.05}
-                  end={0.06 + i * 0.05 + 0.13}
+                  start={0.03 + i * 0.035}
+                  end={0.03 + i * 0.035 + 0.09}
                 >
                   {w.t}
                 </ScrollWord>
