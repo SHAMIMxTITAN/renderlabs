@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException, Query
+from fastapi import FastAPI, APIRouter
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -7,7 +7,6 @@ import asyncio
 import logging
 from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict, EmailStr
-from typing import List
 import uuid
 from datetime import datetime, timezone
 import resend
@@ -43,17 +42,6 @@ logger = logging.getLogger(__name__)
 
 
 # Define Models
-class StatusCheck(BaseModel):
-    model_config = ConfigDict(extra="ignore")
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    client_name: str
-    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-
-
-class StatusCheckCreate(BaseModel):
-    client_name: str
-
-
 class ContactCreate(BaseModel):
     name: str = Field(..., min_length=1, max_length=120)
     email: EmailStr
@@ -119,40 +107,6 @@ async def create_contact(payload: ContactCreate):
         logger.warning("RESEND_API_KEY not set; contact stored but email not sent.")
 
     return {"status": "success", "email_sent": email_sent, "id": submission.id}
-
-
-@api_router.get("/contact", response_model=List[ContactSubmission])
-async def list_contacts(limit: int = Query(50, ge=1, le=200), skip: int = Query(0, ge=0)):
-    items = (
-        await db.contact_submissions.find({}, {"_id": 0})
-        .sort("created_at", -1)
-        .skip(skip)
-        .to_list(limit)
-    )
-    for it in items:
-        if isinstance(it.get('created_at'), str):
-            it['created_at'] = datetime.fromisoformat(it['created_at'])
-    return items
-
-
-@api_router.post("/status", response_model=StatusCheck)
-async def create_status_check(input: StatusCheckCreate):
-    status_obj = StatusCheck(**input.model_dump())
-    doc = status_obj.model_dump()
-    doc['timestamp'] = doc['timestamp'].isoformat()
-    await db.status_checks.insert_one(doc)
-    return status_obj
-
-
-@api_router.get("/status", response_model=List[StatusCheck])
-async def get_status_checks(limit: int = Query(50, ge=1, le=200), skip: int = Query(0, ge=0)):
-    status_checks = (
-        await db.status_checks.find({}, {"_id": 0}).skip(skip).to_list(limit)
-    )
-    for check in status_checks:
-        if isinstance(check['timestamp'], str):
-            check['timestamp'] = datetime.fromisoformat(check['timestamp'])
-    return status_checks
 
 
 app.include_router(api_router)
