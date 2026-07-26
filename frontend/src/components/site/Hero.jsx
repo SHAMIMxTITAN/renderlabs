@@ -7,6 +7,7 @@ import { MagneticButton } from "./MagneticButton";
 const EASE = [0.22, 1, 0.36, 1];
 
 const HERO_POSTER = "/hero-poster.webp";
+const HERO_VIDEO_MOBILE = "/hero-video-mobile.mp4";
 
 const WORDS = [
   { t: "Impossible" },
@@ -51,14 +52,14 @@ export const Hero = () => {
     offset: ["start start", "end end"],
   });
 
-  // Video only ever scales UP. Going below 1 pulls it off the edges and
-  // exposes the page behind it, which is what caused the visible square.
+  // Only ever scales UP. Below 1 the video pulls off the edges and exposes
+  // the page behind it, which is what caused the visible square border.
   const videoScale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
 
   // Hero fades out underneath the incoming section.
   const heroOpacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1, 0]);
 
-  // All copy lands before the overlap begins at ~0.375.
+  // All copy lands before the overlap starts at ~0.375.
   const subOpacity = useTransform(scrollYProgress, [0.19, 0.27], [0, 1]);
   const subY = useTransform(scrollYProgress, [0.19, 0.27], [24, 0]);
   const btnOpacity = useTransform(scrollYProgress, [0.26, 0.34], [0, 1]);
@@ -87,31 +88,23 @@ export const Hero = () => {
         style={{ opacity: isMobile ? 1 : heroOpacity }}
         className={`${isMobile ? "relative" : "sticky top-0"} h-screen w-full overflow-hidden bg-black`}
       >
-        {isMobile ? (
-          <img
-            src={HERO_POSTER}
-            alt=""
-            aria-hidden="true"
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-        ) : (
-          <motion.video
-            data-testid="hero-video"
-            src={HERO_VIDEO}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            poster={HERO_POSTER}
-            style={{ scale: videoScale }}
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-        )}
+        <motion.video
+          data-testid="hero-video"
+          key={isMobile ? "m" : "d"}
+          src={isMobile ? HERO_VIDEO_MOBILE : HERO_VIDEO}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          poster={HERO_POSTER}
+          style={{ scale: isMobile ? 1 : videoScale }}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/15 to-black/75" />
 
         <motion.div
-          key={isMobile ? "m" : "d"}
+          key={isMobile ? "m-copy" : "d-copy"}
           {...mobileWrap}
           className="relative z-10 h-screen flex flex-col items-center justify-center text-center px-6"
         >
