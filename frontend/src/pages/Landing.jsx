@@ -38,12 +38,21 @@ export default function Landing() {
       <Navbar />
       <main>
         <Hero />
-        <KineticDivider />
-        <Services />
-        <Work />
-        <Imagery />
-        <About />
-        <Contact />
+        {/*
+          Everything after the hero rides above it (z-10) and is pulled up by
+          exactly one viewport (-mt-[100vh]) so it slides over the pinned hero.
+          The 100vh is not arbitrary: any less and the hero unpins while still
+          partly visible, which flashes the page background.
+          Mobile keeps normal stacking, since the hero isn't sticky there.
+        */}
+        <div className="relative z-10 bg-white md:-mt-[100vh]">
+          <KineticDivider />
+          <Services />
+          <Work />
+          <Imagery />
+          <About />
+          <Contact />
+        </div>
       </main>
       <Footer />
     </div>
