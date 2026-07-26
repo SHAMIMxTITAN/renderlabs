@@ -1,25 +1,18 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, HTTPException
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
-from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import asyncio
 import logging
 from pathlib import Path
-from pydantic import BaseModel, Field, ConfigDict, EmailStr
+from pydantic import BaseModel, Field, EmailStr
 import uuid
 from datetime import datetime, timezone
 import resend
-import certifi
 
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
-
-# MongoDB connection
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url, tlsCAFile=certifi.where())
-db = client[os.environ['DB_NAME']]
 
 # Email config
 RESEND_API_KEY = os.environ.get('RESEND_API_KEY')
@@ -48,15 +41,6 @@ class ContactCreate(BaseModel):
     message: str = Field(..., min_length=1, max_length=4000)
 
 
-class ContactSubmission(BaseModel):
-    model_config = ConfigDict(extra="ignore")
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    name: str
-    email: str
-    message: str
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-
-
 def build_email_html(name: str, email: str, message: str) -> str:
     safe_message = message.replace("\n", "<br/>")
     return f"""
@@ -82,31 +66,47 @@ async def root():
     return {"message": "Hello World"}
 
 
+@api_router.get("/health")
+async def health():
+    return {"status": "ok", "email_configured": bool(RESEND_API_KEY)}
+
+
 @api_router.post("/contact")
 async def create_contact(payload: ContactCreate):
-    submission = ContactSubmission(**payload.model_dump())
-    doc = submission.model_dump()
-    doc['created_at'] = doc['created_at'].isoformat()
-    await db.contact_submissions.insert_one(doc)
+    submission_id = str(uuid.uuid4())
+    received_at = datetime.now(timezone.utc).isoformat()
 
-    email_sent = False
-    if RESEND_API_KEY:
-        params = {
-            "from": SENDER_EMAIL,
-            "to": [CONTACT_RECIPIENT],
-            "reply_to": payload.email,
-            "subject": f"New Renderlab inquiry from {payload.name}",
-            "html": build_email_html(payload.name, payload.email, payload.message),
-        }
-        try:
-            await asyncio.to_thread(resend.Emails.send, params)
-            email_sent = True
-        except Exception as e:
-            logger.error(f"Failed to send contact email: {e}")
-    else:
-        logger.warning("RESEND_API_KEY not set; contact stored but email not sent.")
+    # Last-resort record: this lands in the Render logs even if the email fails.
+    logger.info(
+        f"CONTACT {submission_id} at {received_at} | "
+        f"name={payload.name!r} email={payload.email!r} message={payload.message!r}"
+    )
 
-    return {"status": "success", "email_sent": email_sent, "id": submission.id}
+    if not RESEND_API_KEY:
+        logger.error("RESEND_API_KEY not set; cannot deliver contact submission.")
+        raise HTTPException(
+            status_code=503,
+            detail="Contact form is temporarily unavailable.",
+        )
+
+    params = {
+        "from": SENDER_EMAIL,
+        "to": [CONTACT_RECIPIENT],
+        "reply_to": payload.email,
+        "subject": f"New Renderlab inquiry from {payload.name}",
+        "html": build_email_html(payload.name, payload.email, payload.message),
+    }
+
+    try:
+        await asyncio.to_thread(resend.Emails.send, params)
+    except Exception as e:
+        logger.error(f"Failed to send contact email {submission_id}: {e}")
+        raise HTTPException(
+            status_code=502,
+            detail="Could not deliver your message. Please email us directly.",
+        )
+
+    return {"status": "success", "id": submission_id}
 
 
 app.include_router(api_router)
@@ -118,8 +118,3 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-@app.on_event("shutdown")
-async def shutdown_db_client():
-    client.close()
