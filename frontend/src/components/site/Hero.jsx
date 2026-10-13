@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, ArrowDown } from "lucide-react";
 import { HERO_VIDEO } from "@/data/content";
 import { MagneticButton } from "./MagneticButton";
@@ -35,17 +35,30 @@ const mobileWord = {
 
 export const Hero = () => {
   const ref = useRef(null);
+  const videoRef = useRef(null);
+  const reducedMotion = useReducedMotion();
+  const [paused, setPaused] = useState(false);
   const [isMobile, setIsMobile] = useState(
-    () => typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches
+    () => typeof window !== "undefined" && !window.matchMedia("(min-width: 768px)").matches
   );
+  const staticHero = isMobile || reducedMotion;
 
   useEffect(() => {
-    const m = window.matchMedia("(max-width: 768px)");
-    const on = () => setIsMobile(m.matches);
+    const m = window.matchMedia("(min-width: 768px)");
+    const on = () => setIsMobile(!m.matches);
     on();
     m.addEventListener("change", on);
     return () => m.removeEventListener("change", on);
   }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    let cancelled = false;
+    if (paused) video.pause();
+    else video.play().catch(() => { if (!cancelled) setPaused(true); });
+    return () => { cancelled = true; };
+  }, [paused, isMobile, reducedMotion]);
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -70,10 +83,10 @@ export const Hero = () => {
     const el = document.querySelector(href);
     if (!el) return;
     if (window.lenis) window.lenis.scrollTo(el, { offset: -80 });
-    else el.scrollIntoView({ behavior: "smooth" });
+    else el.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" });
   };
 
-  const mobileWrap = isMobile
+  const mobileWrap = isMobile && !reducedMotion
     ? { variants: { show: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } } }, initial: "hidden", animate: "show" }
     : {};
 
@@ -82,25 +95,30 @@ export const Hero = () => {
       ref={ref}
       id="home"
       data-testid="hero"
-      className={isMobile ? "relative z-0 h-screen" : "relative z-0 h-[260vh]"}
+      className={staticHero ? "relative z-0 h-screen" : "relative z-0 h-[260vh]"}
     >
       <motion.div
-        style={{ opacity: isMobile ? 1 : heroOpacity }}
-        className={`${isMobile ? "relative" : "sticky top-0"} h-screen w-full overflow-hidden bg-black`}
+        style={{ opacity: staticHero ? 1 : heroOpacity }}
+        className={`${staticHero ? "relative" : "sticky top-0"} h-screen w-full overflow-hidden bg-black`}
       >
-        <motion.video
-          data-testid="hero-video"
-          key={isMobile ? "m" : "d"}
-          src={isMobile ? HERO_VIDEO_MOBILE : HERO_VIDEO}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          poster={HERO_POSTER}
-          style={{ scale: isMobile ? 1 : videoScale }}
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+        {reducedMotion ? (
+          <img src={HERO_POSTER} alt="" className="absolute inset-0 w-full h-full object-cover" />
+        ) : (
+          <motion.video
+            ref={videoRef}
+            data-testid="hero-video"
+            key={isMobile ? "m" : "d"}
+            src={isMobile ? HERO_VIDEO_MOBILE : HERO_VIDEO}
+            autoPlay={!paused}
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            poster={HERO_POSTER}
+            style={{ scale: isMobile ? 1 : videoScale }}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/15 to-black/75" />
 
         <motion.div
@@ -109,7 +127,7 @@ export const Hero = () => {
           className="relative z-10 h-screen flex flex-col items-center justify-center text-center px-6"
         >
           <motion.div
-            variants={isMobile ? mobileWord : undefined}
+            variants={isMobile && !reducedMotion ? mobileWord : undefined}
             className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 backdrop-blur px-4 py-1.5 mb-7"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-[#3b82f6]" />
@@ -120,10 +138,10 @@ export const Hero = () => {
 
           <h1 className="font-display font-extrabold tracking-[-0.04em] leading-[0.95] max-w-5xl text-white text-5xl sm:text-7xl lg:text-8xl flex flex-wrap justify-center">
             {WORDS.map((w, i) =>
-              isMobile ? (
+              staticHero ? (
                 <motion.span
                   key={`m-${i}`}
-                  variants={mobileWord}
+                  variants={reducedMotion ? undefined : mobileWord}
                   className={`inline-block mr-[0.28em] ${w.accent ? "text-[#3b82f6]" : "text-white"}`}
                 >
                   {w.t}
@@ -143,8 +161,8 @@ export const Hero = () => {
           </h1>
 
           <motion.p
-            variants={isMobile ? mobileWord : undefined}
-            style={isMobile ? {} : { opacity: subOpacity, y: subY }}
+            variants={isMobile && !reducedMotion ? mobileWord : undefined}
+            style={staticHero ? {} : { opacity: subOpacity, y: subY }}
             className="mt-8 max-w-xl text-lg font-light leading-relaxed text-white/80"
           >
             Video, imagery, motion, and landing pages — crafted with real
@@ -152,8 +170,8 @@ export const Hero = () => {
           </motion.p>
 
           <motion.div
-            variants={isMobile ? mobileWord : undefined}
-            style={isMobile ? {} : { opacity: btnOpacity, y: btnY }}
+            variants={isMobile && !reducedMotion ? mobileWord : undefined}
+            style={staticHero ? {} : { opacity: btnOpacity, y: btnY }}
             className="mt-10 flex flex-wrap items-center justify-center gap-4"
           >
             <MagneticButton
@@ -178,17 +196,24 @@ export const Hero = () => {
           onClick={() => scrollTo("#services")}
           aria-label="Scroll down"
           data-testid="hero-scroll-indicator"
-          style={{ opacity: isMobile ? 1 : scrollOpacity }}
+          style={{ opacity: staticHero ? 1 : scrollOpacity }}
           className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-white/70 hover:text-white transition-colors"
         >
           <span className="text-[11px] font-medium tracking-[0.25em] uppercase">Scroll</span>
-          <motion.span
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-          >
+          <span>
             <ArrowDown size={16} />
-          </motion.span>
+          </span>
         </motion.button>
+        {!reducedMotion && (
+          <button
+            type="button"
+            aria-pressed={paused}
+            onClick={() => setPaused((value) => !value)}
+            className="absolute bottom-8 right-6 z-20 rounded-full bg-black/70 px-4 py-2 text-xs font-medium text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          >
+            {paused ? "Resume video" : "Pause video"}
+          </button>
+        )}
       </motion.div>
     </section>
   );

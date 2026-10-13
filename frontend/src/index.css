@@ -9,7 +9,7 @@
   --rl-bg-soft: #f7f7f7;
   --rl-text: #111111;
   --rl-text-soft: #4b5563;
-  --rl-muted: #9ca3af;
+  --rl-muted: #5b677a;
   --rl-accent: #2563eb;
   --rl-accent-hover: #1d4ed8;
   --rl-border: #e5e7eb;
@@ -52,6 +52,10 @@ body {
 .rl-marquee:hover .rl-marquee-track {
   animation-play-state: paused;
 }
+.rl-marquee[data-paused="true"] .rl-marquee-track {
+  animation: none;
+  transform: none;
+}
 @media (max-width: 768px) {
   .rl-marquee-track {
     animation-duration: 32s;
@@ -79,6 +83,10 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .rl-ticker {
     animation: none;
+  }
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
   }
 }
 

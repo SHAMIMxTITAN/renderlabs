@@ -1,11 +1,14 @@
-import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { X, Play } from "lucide-react";
+import { useRef, useState } from "react";
+import { useReducedMotion } from "framer-motion";
+import { Play } from "lucide-react";
 import { WORK } from "@/data/content";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Reveal } from "./Reveal";
 
 export const Work = () => {
   const [active, setActive] = useState(null);
+  const opener = useRef(null);
+  const reducedMotion = useReducedMotion();
 
   return (
     <section id="work" data-testid="work" className="py-20 md:py-32 bg-white">
@@ -13,7 +16,7 @@ export const Work = () => {
         <Reveal>
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
             <div>
-              <p className="text-sm font-medium tracking-wide uppercase text-[#9ca3af] mb-4">
+              <p className="text-sm font-medium tracking-wide uppercase text-[var(--rl-muted)] mb-4">
                 Selected work
               </p>
               <h2 className="font-display font-extrabold tracking-[-0.03em] text-[#111111] text-4xl md:text-6xl leading-[0.98]">
@@ -31,8 +34,12 @@ export const Work = () => {
             <Reveal key={w.id} delay={i * 0.06}>
               <button
                 data-testid={`work-item-${w.id}`}
-                onClick={() => setActive(w)}
+                onClick={(event) => {
+                  opener.current = event.currentTarget;
+                  setActive(w);
+                }}
                 onMouseEnter={(e) => {
+                  if (reducedMotion) return;
                   const v = e.currentTarget.querySelector("video");
                   if (v) v.play().catch(() => {});
                 }}
@@ -71,53 +78,37 @@ export const Work = () => {
         </div>
       </div>
 
-      <AnimatePresence>
+      <Dialog open={Boolean(active)} onOpenChange={(open) => { if (!open) setActive(null); }}>
         {active && (
-          <motion.div
+          <DialogContent
             data-testid="work-lightbox"
-            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setActive(null)}
+            className="z-[60] w-[calc(100%_-_2rem)] max-w-4xl border-0 bg-transparent p-0 text-white shadow-none [&>button]:rounded-full [&>button]:bg-black/70 [&>button]:p-2 [&>button]:text-white [&>button]:opacity-100"
+            onCloseAutoFocus={(event) => {
+              event.preventDefault();
+              opener.current?.focus();
+            }}
           >
-            <motion.div
-              className="relative w-full max-w-4xl"
-              initial={{ scale: 0.94, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.94, opacity: 0 }}
-              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                data-testid="work-lightbox-close"
-                onClick={() => setActive(null)}
-                className="absolute -top-12 right-0 text-white/80 hover:text-white flex items-center gap-2 text-sm"
-              >
-                Close <X size={20} />
-              </button>
-              <div className="rounded-2xl overflow-hidden bg-black">
-                <video
-                  src={active.src}
-                  controls
-                  autoPlay
-                  loop
-                  playsInline
-                  className="w-full max-h-[78vh] object-contain bg-black"
-                />
-              </div>
-              <div className="mt-4">
-                <span className="text-xs font-medium uppercase tracking-wide text-white/60">
-                  {active.category}
-                </span>
-                <h3 className="font-display text-xl font-semibold text-white">
-                  {active.title}
-                </h3>
-              </div>
-            </motion.div>
-          </motion.div>
+            <div className="rounded-2xl overflow-hidden bg-black">
+              <video
+                src={active.src}
+                controls
+                autoPlay={!reducedMotion}
+                loop
+                playsInline
+                className="w-full max-h-[70vh] object-contain bg-black"
+              />
+            </div>
+            <div>
+              <DialogDescription className="text-xs font-medium uppercase tracking-wide text-white/90">
+                {active.category}
+              </DialogDescription>
+              <DialogTitle className="font-display text-xl font-semibold text-white">
+                {active.title}
+              </DialogTitle>
+            </div>
+          </DialogContent>
         )}
-      </AnimatePresence>
+      </Dialog>
     </section>
   );
 };

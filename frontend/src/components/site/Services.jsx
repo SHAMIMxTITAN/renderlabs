@@ -9,7 +9,7 @@ export const Services = () => (
     <div className="max-w-7xl mx-auto px-6 md:px-12 grid lg:grid-cols-12 gap-10 lg:gap-14">
       <div className="lg:col-span-4">
         <Reveal>
-          <p className="text-sm font-medium tracking-wide uppercase text-[#9ca3af] mb-4">
+          <p className="text-sm font-medium tracking-wide uppercase text-[var(--rl-muted)] mb-4">
             What we do
           </p>
           <h2 className="font-display font-extrabold tracking-[-0.03em] text-[#111111] text-4xl md:text-6xl leading-[0.98]">

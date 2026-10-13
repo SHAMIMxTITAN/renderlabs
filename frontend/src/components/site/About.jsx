@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import { useInView } from "framer-motion";
+import { useInView, useReducedMotion } from "framer-motion";
 import { Reveal } from "./Reveal";
 
 const CountUp = ({ to, duration = 1200 }) => {
   const ref = useRef(null);
+  const reducedMotion = useReducedMotion();
   const inView = useInView(ref, { once: true, margin: "0px" });
   const [n, setN] = useState(0);
 
   useEffect(() => {
-    if (!inView) return;
+    if (!inView || reducedMotion) return;
     let start;
     let raf;
     const step = (t) => {
@@ -19,9 +20,9 @@ const CountUp = ({ to, duration = 1200 }) => {
     };
     raf = requestAnimationFrame(step);
     return () => cancelAnimationFrame(raf);
-  }, [inView, to, duration]);
+  }, [inView, to, duration, reducedMotion]);
 
-  return <span ref={ref}>{inView ? n : 0}</span>;
+  return <span ref={ref}>{reducedMotion ? to : inView ? n : 0}</span>;
 };
 
 const STATS = [
@@ -35,7 +36,7 @@ export const About = () => (
     <div className="max-w-7xl mx-auto px-6 md:px-12 grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
       <div className="lg:col-span-5">
         <Reveal>
-          <p className="text-sm font-medium tracking-wide uppercase text-[#9ca3af] mb-8">
+          <p className="text-sm font-medium tracking-wide uppercase text-[var(--rl-muted)] mb-8">
             About Renderlab
           </p>
         </Reveal>
@@ -46,7 +47,7 @@ export const About = () => (
                 <div className="font-display text-4xl md:text-5xl font-extrabold tracking-[-0.02em] text-[#111111]">
                   {s.value}
                 </div>
-                <div className="mt-1.5 text-sm text-[#9ca3af]">{s.label}</div>
+                <div className="mt-1.5 text-sm text-[var(--rl-muted)]">{s.label}</div>
               </div>
             </Reveal>
           ))}

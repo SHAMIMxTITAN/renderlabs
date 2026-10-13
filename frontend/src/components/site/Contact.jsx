@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
 import { Mail, Phone, Instagram, ArrowRight, Loader2 } from "lucide-react";
@@ -10,35 +10,44 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 export const Contact = () => {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [loading, setLoading] = useState(false);
+  const sending = useRef(false);
 
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
   const submit = async (e) => {
     e.preventDefault();
-    if (!form.name || !form.email || !form.message) {
+    if (sending.current) return;
+    const payload = {
+      name: form.name.trim(),
+      email: form.email.trim(),
+      message: form.message.trim(),
+    };
+    if (!payload.name || !payload.email || !payload.message) {
       toast.error("Please fill in all fields.");
       return;
     }
+    sending.current = true;
     setLoading(true);
     try {
-      await axios.post(`${API}/contact`, form);
+      await axios.post(`${API}/contact`, payload);
       toast.success("Message sent — we'll be in touch shortly.");
       setForm({ name: "", email: "", message: "" });
     } catch (err) {
       toast.error("Something went wrong. Please try again.");
     } finally {
+      sending.current = false;
       setLoading(false);
     }
   };
 
   const inputCls =
-    "w-full h-12 rounded-xl bg-[#f7f7f7] border border-[#e5e7eb] px-4 text-[#111111] placeholder:text-[#9ca3af] outline-none transition-all focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb] focus:bg-white";
+    "w-full h-12 rounded-xl bg-[#f7f7f7] border border-[#e5e7eb] px-4 text-[#111111] placeholder:text-[var(--rl-muted)] outline-none transition-all focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb] focus:bg-white";
 
   return (
     <section id="contact" data-testid="contact" className="py-20 md:py-32 bg-white">
       <div className="max-w-7xl mx-auto px-6 md:px-12 grid lg:grid-cols-2 gap-14 lg:gap-20 items-start">
         <Reveal>
-          <p className="text-sm font-medium tracking-wide uppercase text-[#9ca3af] mb-5">
+          <p className="text-sm font-medium tracking-wide uppercase text-[var(--rl-muted)] mb-5">
             Contact
           </p>
           <h2 className="font-display font-extrabold tracking-[-0.04em] text-[#111111] text-5xl md:text-7xl leading-[0.95]">
@@ -50,10 +59,7 @@ export const Contact = () => {
           </h2>
 
           <div className="mt-8 inline-flex items-center gap-2.5 rounded-full border border-[#e5e7eb] bg-[#f7f7f7] px-4 py-2">
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75" />
-              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-500" />
-            </span>
+            <span className="h-2.5 w-2.5 rounded-full bg-green-500" />
             <span className="text-sm font-medium text-[#111111]">
               Currently taking new projects
             </span>
@@ -61,7 +67,7 @@ export const Contact = () => {
 
           <div className="mt-10 space-y-1 border-t border-[#e5e7eb] pt-8">
             <div className="py-3" data-testid="contact-name">
-              <div className="text-xs uppercase tracking-wide text-[#9ca3af]">Studio lead</div>
+              <div className="text-xs uppercase tracking-wide text-[var(--rl-muted)]">Studio lead</div>
               <div className="text-[#111111] font-medium">{CONTACT.name}</div>
             </div>
             <a
@@ -104,8 +110,14 @@ export const Contact = () => {
           >
             <div className="space-y-5">
               <div>
-                <label className="block text-sm font-medium text-[#111111] mb-2">Name</label>
+                <label htmlFor="contact-name" className="block text-sm font-medium text-[#111111] mb-2">Name</label>
                 <input
+                  id="contact-name"
+                  name="name"
+                  autoComplete="name"
+                  required
+                  maxLength={120}
+                  disabled={loading}
                   data-testid="contact-input-name"
                   type="text"
                   value={form.name}
@@ -115,8 +127,13 @@ export const Contact = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#111111] mb-2">Email</label>
+                <label htmlFor="contact-email" className="block text-sm font-medium text-[#111111] mb-2">Email</label>
                 <input
+                  id="contact-email"
+                  name="email"
+                  autoComplete="email"
+                  required
+                  disabled={loading}
                   data-testid="contact-input-email"
                   type="email"
                   value={form.email}
@@ -126,8 +143,14 @@ export const Contact = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#111111] mb-2">Message</label>
+                <label htmlFor="contact-message" className="block text-sm font-medium text-[#111111] mb-2">Message</label>
                 <textarea
+                  id="contact-message"
+                  name="message"
+                  autoComplete="off"
+                  required
+                  maxLength={4000}
+                  disabled={loading}
                   data-testid="contact-input-message"
                   value={form.message}
                   onChange={set("message")}

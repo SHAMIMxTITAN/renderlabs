@@ -5,7 +5,8 @@ import os
 import asyncio
 import logging
 from pathlib import Path
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel, ConfigDict, Field, EmailStr
+from html import escape
 import uuid
 from datetime import datetime, timezone
 import resend
@@ -36,13 +37,17 @@ logger = logging.getLogger(__name__)
 
 # Define Models
 class ContactCreate(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True)
+
     name: str = Field(..., min_length=1, max_length=120)
     email: EmailStr
     message: str = Field(..., min_length=1, max_length=4000)
 
 
 def build_email_html(name: str, email: str, message: str) -> str:
-    safe_message = message.replace("\n", "<br/>")
+    name = escape(name)
+    email = escape(email)
+    safe_message = escape(message).replace("\n", "<br/>")
     return f"""
     <table width="100%" cellpadding="0" cellspacing="0" style="font-family: Arial, Helvetica, sans-serif; background:#f7f7f7; padding:24px;">
       <tr><td>

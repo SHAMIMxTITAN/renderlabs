@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { useReducedMotion } from "framer-motion";
+
 const PHRASE = ["Editing", "AI Imagery", "Motion Graphics", "Web Design"];
 
 const Track = () => (
@@ -13,16 +16,40 @@ const Track = () => (
   </div>
 );
 
-export const KineticDivider = () => (
-  <div
-    data-testid="kinetic-divider"
-    className="relative w-full overflow-hidden border-y border-[#ededed] bg-white py-6 md:py-8"
-  >
-    <div className="rl-ticker flex w-max whitespace-nowrap">
-      <Track />
-      <Track />
+export const KineticDivider = () => {
+  const reducedMotion = useReducedMotion();
+  const [paused, setPaused] = useState(false);
+  const stopped = paused || reducedMotion;
+
+  return (
+    <div
+      data-testid="kinetic-divider"
+      className="relative w-full overflow-hidden border-y border-[#ededed] bg-white py-6 md:py-8"
+    >
+      <p className="sr-only">{PHRASE.join(", ")}</p>
+      <div className="max-w-7xl mx-auto px-6 md:px-12 flex justify-end mb-3">
+        <button
+          type="button"
+          aria-controls="services-ticker"
+          aria-pressed={Boolean(stopped)}
+          disabled={Boolean(reducedMotion)}
+          onClick={() => setPaused((value) => !value)}
+          className="text-sm font-medium underline underline-offset-4 disabled:no-underline"
+        >
+          {reducedMotion ? "Motion disabled" : paused ? "Resume ticker" : "Pause ticker"}
+        </button>
+      </div>
+      <div
+        id="services-ticker"
+        data-testid="kinetic-track"
+        className="rl-ticker flex w-max whitespace-nowrap"
+        style={{ animationPlayState: stopped ? "paused" : "running" }}
+      >
+        <Track />
+        <Track />
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default KineticDivider;

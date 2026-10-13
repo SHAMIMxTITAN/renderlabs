@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
+import { useReducedMotion } from "framer-motion";
 import { LOGO } from "@/data/content";
 import { MagneticButton } from "./MagneticButton";
 
@@ -11,6 +12,7 @@ const LINKS = [
 ];
 
 export const Navbar = () => {
+  const reducedMotion = useReducedMotion();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -25,8 +27,8 @@ export const Navbar = () => {
     setOpen(false);
     const el = document.querySelector(href);
     if (!el) return;
-    if (window.lenis) window.lenis.scrollTo(el, { offset: -80 });
-    else el.scrollIntoView({ behavior: "smooth" });
+    if (window.lenis && !reducedMotion) window.lenis.scrollTo(el, { offset: -80 });
+    else el.scrollIntoView({ behavior: reducedMotion ? "instant" : "smooth" });
   };
 
   // Over the hero video links/logo are light; once scrolled they go dark.
