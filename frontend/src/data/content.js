@@ -1,5 +1,4 @@
-export const LOGO =
-  "https://customer-assets.emergentagent.com/job_10febd9f-37d9-4310-ad74-a6564a0856a2/artifacts/m2o6wl7u_A_futuristic_SLA_MSLA_resin_printer_202606150240.jpeg";
+export const LOGO = "/logo.webp";
 
 export const HERO_VIDEO =
   "/hero-video.mp4";
@@ -12,74 +11,107 @@ export const CONTACT = {
   instagram: "https://www.instagram.com/renderlabhq/",
 };
 
+// `sections` = what the service's own page (/services/<key>) shows. A service
+// without sections has no page yet, so its card isn't clickable.
 export const SERVICES = [
+  { key: "faceless", icon: "TrendingUp", title: "Faceless Channels", copy: "Hooks, scripts, edits. We grow it.", sections: ["channels", "results", "short", "long"] },
+  { key: "clipping", icon: "Scissors", title: "Clipping", copy: "Long videos into daily Shorts." },
+  { key: "editing", icon: "Clapperboard", title: "AI Video Editing", copy: "Shorts and long-form, fast.", sections: ["short", "long"] },
+  { key: "thumbnails", icon: "MousePointerClick", title: "Thumbnails", copy: "Designed to get the click.", sections: ["thumbnails"] },
+  { key: "motion", icon: "Orbit", title: "AI Motion Graphics", copy: "2D and 3D motion for brands.", sections: ["motion"] },
+  { key: "ads", icon: "Megaphone", title: "Ads in a Day", copy: "Short ads, delivered next day." },
+  { key: "images", icon: "Sparkles", title: "Realistic AI Images", copy: "Product shots, no studio.", sections: ["images"] },
+  { key: "web", icon: "LayoutTemplate", title: "Landing Pages", copy: "Premium pages that convert." },
+];
+
+// Faceless channels we run, shown as logos on the Faceless Channels page. Add one
+// entry per channel: logo in public/channels/ (square, ~256px WebP), `url` is where
+// the logo links, `instagram` is optional.
+export const CHANNELS = [
   {
-    key: "video",
-    icon: "Clapperboard",
-    title: "Video Editing",
-    copy: "Sharp cuts, clean pacing and color — edits crafted for retention and impact.",
-  },
-  {
-    key: "images",
-    icon: "Sparkles",
-    title: "Realistic AI Images",
-    copy: "Photoreal AI-generated imagery, art-directed to look indistinguishably real.",
-  },
-  {
-    key: "motion",
-    icon: "Orbit",
-    title: "AI Motion Graphics",
-    copy: "Fluid, dimensional motion design that gives brands a living signature.",
-  },
-  {
-    key: "web",
-    icon: "LayoutTemplate",
-    title: "Cool Landing Pages",
-    copy: "Custom, conversion-minded web design that feels premium from first scroll.",
+    key: "pixden",
+    name: "Pixden",
+    niche: "Gaming",
+    logo: "/channels/pixden.webp",
+    url: "https://www.youtube.com/@pixden-z8m",
+    instagram: "https://www.instagram.com/pixden.gaming/",
   },
 ];
 
-export const WORK = [
+// Live public YouTube counts. Re-fetch before changing any number here and
+// update STATS_AS_OF with the moment they were read.
+export const STATS_AS_OF = "21 Oct 2026";
+
+export const RESULTS = {
+  channel: "Pixden",
+  channelUrl: "https://www.youtube.com/@pixden-z8m",
+  stats: [
+    { value: "2.17M", label: "views on one Short" },
+    { value: "22×", label: "median views per Short" },
+    { value: "3", label: "Shorts past 400K" },
+  ],
+  before: { label: "Before our method", median: "1,260", width: "4.6%" },
+  after: { label: "After our method", median: "27,428", width: "100%" },
+};
+
+export const ytThumb = (id) => `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`;
+
+// The portfolio tabs. An item is one of: youtubeId (plays in a pop-up),
+// instagramId (opens on Instagram), video + poster (plays in a pop-up), image (static).
+export const WORK_TABS = [
   {
-    id: "w1",
-    title: "Product Motion Study",
-    category: "AI Motion Graphics",
-    type: "video",
-    src: "https://customer-assets.emergentagent.com/job_10febd9f-37d9-4310-ad74-a6564a0856a2/artifacts/agksr9qn_hf_20260616_053138_5d3a30dc-02ba-4bef-babb-b697fdbe1fb5%20%281%29.mp4",
+    key: "short",
+    label: "Short-form editing",
+    shape: "tall",
+    items: [
+      { id: "px-necklace", youtubeId: "iv-uYuXHsvc", title: "Dhalsim's skull necklace", views: "2.17M views" },
+      { id: "ig-chunli", instagramId: "DecGDySBRAs", poster: "/work/ig-chunli.jpg", title: "Capcom wanted Chun-Li weaker?!", views: "1.1M views" },
+      { id: "ig-dhalsim", instagramId: "DefiCVvoRDD", poster: "/work/ig-dhalsim.jpg", title: "Vidyut was NOT the first Dhalsim", views: "452K views" },
+      { id: "px-dhalsim", youtubeId: "1J5lmFeTRdA", title: "The game Dhalsim is insane", views: "422K views" },
+    ],
   },
   {
-    id: "w2",
-    title: "Footwear Render Loop",
-    category: "Realistic AI Images",
-    type: "video",
-    src: "/hero-video.mp4",
+    key: "long",
+    label: "Long-form editing",
+    shape: "wide",
+    items: [
+      { id: "px-sf-lore", youtubeId: "ZFBLyiZNlAM", title: "Street Fighter lore in 15 minutes", views: "68K views" },
+      { id: "px-dhalsim-story", youtubeId: "jX8-VkaobmM", title: "Dhalsim: the complete story", views: "62K views" },
+    ],
   },
   {
-    id: "w3",
-    title: "Cinematic Sequence",
-    category: "Video Editing",
-    type: "video",
-    src: "https://customer-assets.emergentagent.com/job_10febd9f-37d9-4310-ad74-a6564a0856a2/artifacts/g7bbn8wp_hf_20260615_132900_6c377ec4-3c0c-4df0-82e5-ccb86e17b5dd.mp4",
-  },
-  {
-    id: "w4",
-    title: "Abstract Brand Film",
-    category: "AI Motion Graphics",
-    type: "video",
-    src: "https://customer-assets.emergentagent.com/job_10febd9f-37d9-4310-ad74-a6564a0856a2/artifacts/lchede8p_hf_20260615_095611_dbe72b67-dab2-4bcb-b7d5-6a70adf103a7.mp4",
+    key: "thumbnails",
+    label: "Thumbnail design",
+    shape: "wide",
+    items: [
+      { id: "th-sf-lore", image: ytThumb("ZFBLyiZNlAM"), title: "Street Fighter lore", views: "68K views" },
+      { id: "th-dhalsim", image: ytThumb("jX8-VkaobmM"), title: "Dhalsim: the complete story", views: "62K views" },
+    ],
   },
 ];
 
-// AI Imagery Showcase marquee — add more image URLs here anytime, the marquee
-// auto-duplicates the set and keeps looping seamlessly.
+// Only on the AI Motion Graphics page, not in the homepage tabs.
+export const MOTION = {
+  key: "motion",
+  label: "AI motion graphics",
+  shape: "tall",
+  items: [
+    // `views` doubles as the pill label; this reel has no public count.
+    { id: "twistella-3d", video: "/work/twistella-3d.mp4", poster: "/work/twistella-3d.jpg", title: "Twistella brand reel", views: "3D photoreal" },
+  ],
+};
+
+// AI Imagery Showcase marquee. Files live in public/imagery as 800px-wide WebP
+// (~60 KB each; the originals were 1.3–2.5 MB PNGs that made scrolling stutter).
+// The marquee duplicates the set to loop seamlessly.
 export const IMAGERY = [
-  "https://customer-assets.emergentagent.com/job_creative-ai-studio-217/artifacts/s2vf81kv_4AF72A20-4B81-4450-9E1C-2200E0681C91.png",
-  "https://customer-assets.emergentagent.com/job_creative-ai-studio-217/artifacts/zw1rizmf_1ACD8A3D-24CC-4CD7-8CB4-C77DE1D97BA3.png",
-  "https://customer-assets.emergentagent.com/job_creative-ai-studio-217/artifacts/ba9030ez_IMG_1398.PNG",
-  "https://customer-assets.emergentagent.com/job_creative-ai-studio-217/artifacts/zvcw5vgl_03285E6A-6ACB-414B-A5A1-5BA5380C8438.png",
-  "https://customer-assets.emergentagent.com/job_creative-ai-studio-217/artifacts/94knb0o8_IMG_7034.JPG",
-  "https://customer-assets.emergentagent.com/job_creative-ai-studio-217/artifacts/na64pjwe_70CC0CA1-7F8F-4577-949E-1196EF4F4517.jpeg",
-  "https://customer-assets.emergentagent.com/job_creative-ai-studio-217/artifacts/jpiyca8y_IMG_7031.JPG",
-  "https://customer-assets.emergentagent.com/job_creative-ai-studio-217/artifacts/g2gq53yy_Iris%20Male%20Lifestyle%20%281%29.png",
-  "https://customer-assets.emergentagent.com/job_creative-ai-studio-217/artifacts/ljc5xwvp_38D16AEB-661D-420A-8962-7800D1CBE194.png",
+  "/imagery/ai-01.webp",
+  "/imagery/ai-02.webp",
+  "/imagery/ai-03.webp",
+  "/imagery/ai-04.webp",
+  "/imagery/ai-05.webp",
+  "/imagery/ai-06.webp",
+  "/imagery/ai-07.webp",
+  "/imagery/ai-08.webp",
+  "/imagery/ai-09.webp",
 ];

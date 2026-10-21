@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, ArrowDown } from "lucide-react";
 import { HERO_VIDEO } from "@/data/content";
+import { useInView } from "@/hooks/use-in-view";
 import { MagneticButton } from "./MagneticButton";
 
 const EASE = [0.22, 1, 0.36, 1];
@@ -51,19 +52,27 @@ export const Hero = () => {
     return () => m.removeEventListener("change", on);
   }, []);
 
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    let cancelled = false;
-    if (paused) video.pause();
-    else video.play().catch(() => { if (!cancelled) setPaused(true); });
-    return () => { cancelled = true; };
-  }, [paused, isMobile, reducedMotion]);
-
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end end"],
   });
+
+  // Not visible = don't decode. Desktop: the pinned hero has faded to nothing
+  // under the content by progress ~1. Mobile: the section is off screen.
+  const inView = useInView(ref);
+  const [fadedOut, setFadedOut] = useState(false);
+  useMotionValueEvent(scrollYProgress, "change", (v) => setFadedOut(!staticHero && v > 0.98));
+  const offscreen = !inView || fadedOut;
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    let cancelled = false;
+    if (paused || offscreen) video.pause();
+    // Only a blocked autoplay means "paused"; an AbortError is just a reload interrupting play().
+    else video.play().catch((e) => { if (!cancelled && e.name === "NotAllowedError") setPaused(true); });
+    return () => { cancelled = true; };
+  }, [paused, offscreen, isMobile, reducedMotion]);
 
   // Only ever scales UP. Below 1 the video pulls off the edges and exposes
   // the page behind it, which is what caused the visible square border.
@@ -165,8 +174,7 @@ export const Hero = () => {
             style={staticHero ? {} : { opacity: subOpacity, y: subY }}
             className="mt-8 max-w-xl text-lg font-light leading-relaxed text-white/80"
           >
-            Video, imagery, motion, and landing pages — crafted with real
-            creative direction for brands and businesses.
+            AI video, editing, clipping and thumbnails for creators and brands.
           </motion.p>
 
           <motion.div

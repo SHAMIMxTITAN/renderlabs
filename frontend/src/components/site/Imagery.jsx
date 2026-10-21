@@ -1,17 +1,22 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import { IMAGERY } from "@/data/content";
+import { useInView } from "@/hooks/use-in-view";
 import { Reveal } from "./Reveal";
 
 export const Imagery = () => {
   const reducedMotion = useReducedMotion();
   const [paused, setPaused] = useState(false);
   const stopped = paused || reducedMotion;
+  const ref = useRef(null);
+  // Off screen the loop just idles (it kept ticking and costing frames before).
+  const inView = useInView(ref);
   // Duplicate the set back-to-back so the -50% translate loops seamlessly.
   const loop = stopped ? IMAGERY : [...IMAGERY, ...IMAGERY];
 
   return (
     <section
+      ref={ref}
       id="imagery"
       data-testid="imagery"
       className="py-20 md:py-32 bg-white overflow-hidden"
@@ -63,7 +68,7 @@ export const Imagery = () => {
           <div
             className="rl-marquee-track flex w-max gap-5 md:gap-6"
             data-testid="imagery-marquee-track"
-            style={{ animationPlayState: stopped ? "paused" : undefined }}
+            style={{ animationPlayState: stopped || !inView ? "paused" : undefined }}
           >
             {loop.map((src, i) => (
               <div
@@ -75,7 +80,7 @@ export const Imagery = () => {
                 <img
                   src={src}
                   alt={i >= IMAGERY.length ? "" : "AI-generated imagery"}
-                  loading="lazy"
+                  loading="lazy" decoding="async"
                   className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover/card:scale-110"
                 />
               </div>

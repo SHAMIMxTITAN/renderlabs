@@ -1,44 +1,60 @@
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { useReducedMotion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { LOGO } from "@/data/content";
 import { MagneticButton } from "./MagneticButton";
 
 const LINKS = [
-  { label: "Work", href: "#work" },
   { label: "Services", href: "#services" },
-  { label: "About", href: "#about" },
+  { label: "Results", href: "#results" },
+  { label: "Work", href: "#work" },
   { label: "Contact", href: "#contact" },
 ];
 
-export const Navbar = () => {
+// `solid`: pages without the dark hero video start with the light, frosted bar.
+export const Navbar = ({ solid = false }) => {
+  const navigate = useNavigate();
   const reducedMotion = useReducedMotion();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
+  // A 1px marker 80px down the page: once it leaves the viewport, the bar turns solid.
+  // The browser reports this itself, so nothing runs per scroll frame (a scroll
+  // listener reading scrollY forced a layout every frame and was the top cost).
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 80);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    if (solid) return;
+    const marker = document.createElement("div");
+    marker.setAttribute("aria-hidden", "true");
+    marker.style.cssText = "position:absolute;top:80px;left:0;width:1px;height:1px;pointer-events:none;";
+    document.body.prepend(marker);
+    const io = new IntersectionObserver(([entry]) => setScrolled(!entry.isIntersecting));
+    io.observe(marker);
+    return () => {
+      io.disconnect();
+      marker.remove();
+    };
+  }, [solid]);
 
   const go = (href) => {
     setOpen(false);
     const el = document.querySelector(href);
-    if (!el) return;
+    // Not on the homepage: go there; ScrollRestoration scrolls to the hash.
+    if (!el) return navigate(href === "#home" ? "/" : `/${href}`, { viewTransition: true });
     if (window.lenis && !reducedMotion) window.lenis.scrollTo(el, { offset: -80 });
     else el.scrollIntoView({ behavior: reducedMotion ? "instant" : "smooth" });
   };
 
   // Over the hero video links/logo are light; once scrolled they go dark.
-  const onDark = !scrolled;
+  const isSolid = solid || scrolled;
+  const onDark = !isSolid;
 
   return (
     <header
       data-testid="navbar"
+      style={{ viewTransitionName: "site-nav" }}
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-        scrolled
+        isSolid
           ? "bg-white/80 backdrop-blur-xl border-b border-[#e5e7eb] shadow-[0_1px_20px_rgba(17,17,17,0.04)]"
           : "bg-transparent"
       }`}

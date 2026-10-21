@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
+import { useInView } from "@/hooks/use-in-view";
 
-const PHRASE = ["Editing", "AI Imagery", "Motion Graphics", "Web Design"];
+const PHRASE = ["AI Video", "Editing", "Clipping", "Thumbnails", "Motion Graphics", "Ads", "Web Design"];
 
 const Track = () => (
   <div className="flex items-center shrink-0" aria-hidden="true">
-    {PHRASE.concat(PHRASE).map((word, i) => (
+    {PHRASE.map((word, i) => (
       <span key={i} className="flex items-center">
         <span className="font-display font-extrabold tracking-[-0.02em] text-[#111111] text-3xl md:text-5xl px-6 md:px-10">
           {word}
@@ -20,9 +21,12 @@ export const KineticDivider = () => {
   const reducedMotion = useReducedMotion();
   const [paused, setPaused] = useState(false);
   const stopped = paused || reducedMotion;
+  const ref = useRef(null);
+  const inView = useInView(ref);
 
   return (
     <div
+      ref={ref}
       data-testid="kinetic-divider"
       className="relative w-full overflow-hidden border-y border-[#ededed] bg-white py-6 md:py-8"
     >
@@ -43,7 +47,7 @@ export const KineticDivider = () => {
         id="services-ticker"
         data-testid="kinetic-track"
         className="rl-ticker flex w-max whitespace-nowrap"
-        style={{ animationPlayState: stopped ? "paused" : "running" }}
+        style={{ animationPlayState: stopped || !inView ? "paused" : "running" }}
       >
         <Track />
         <Track />

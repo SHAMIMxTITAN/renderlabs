@@ -12,12 +12,12 @@ test("the video dialog contains focus, closes with Escape, and returns focus to 
   const root = createRoot(container);
   try {
     act(() => root.render(<Work />));
-    const opener = container.querySelector('[data-testid="work-item-w2"]');
+    const opener = container.querySelector('[data-testid="work-item-px-necklace"]');
     opener.focus();
     act(() => opener.click());
     const dialog = document.querySelector('[role="dialog"]');
     expect(dialog).not.toBeNull();
-    expect(dialog.textContent).toContain("Footwear Render Loop");
+    expect(dialog.textContent).toContain("Dhalsim's skull necklace");
     expect(dialog.contains(document.activeElement)).toBe(true);
     expect(container.getAttribute("aria-hidden")).toBe("true");
     act(() => dialog.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true })));

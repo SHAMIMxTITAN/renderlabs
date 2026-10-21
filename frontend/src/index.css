@@ -101,6 +101,89 @@ html {
   scroll-padding-top: 88px;
 }
 
+/* Continuous (Apple-style) corners: the curve eases into the straight edge instead of
+   a circular arc meeting it with a visible kink. Native CSS, no extra cost; browsers
+   without corner-shape keep plain rounded corners. Radii grow 1.25x so the overall
+   roundness matches the old circular corners. Pills and circles (rounded-full) stay
+   round. The 2px-ringed Work panels keep inner = outer - 2px so the ring stays even. */
+@supports (corner-shape: superellipse(1.5)) {
+  .rounded-lg,
+  .rounded-xl,
+  .rounded-2xl,
+  .rounded-3xl,
+  .rounded-\[22px\] {
+    corner-shape: superellipse(1.5);
+  }
+  .rounded-lg { border-radius: calc(var(--radius) * 1.25); }
+  .rounded-xl { border-radius: 0.9375rem; }
+  .rounded-2xl { border-radius: 1.25rem; }
+  .rounded-3xl { border-radius: 1.875rem; }
+  .rounded-\[22px\] { border-radius: 28px; }
+}
+
+/* Scroll reveal (see Reveal.jsx). Only opacity and transform animate, as a CSS
+   animation, so the compositor runs it without touching the main thread. */
+@keyframes rl-reveal-in {
+  from { opacity: 0; transform: translate3d(0, var(--rl-y, 18px), 0); }
+  to { opacity: 1; transform: none; }
+}
+.rl-reveal {
+  opacity: 0;
+  transform: translate3d(0, var(--rl-y, 18px), 0);
+}
+.rl-reveal.is-in {
+  animation: rl-reveal-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) var(--rl-delay, 0s) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rl-reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Page transitions (View Transitions API; browsers without it just switch pages).
+   Old page fades out fast, new page fades in while rising a little, the navbar
+   stays put. The clicked service icon shrinks away where it is, then the other
+   page's icon pops up where it lands (card and page icons have different names,
+   so the browser never slides one across the screen into the other). */
+@keyframes rl-page-out {
+  to { opacity: 0; }
+}
+@keyframes rl-page-in {
+  from { opacity: 0; transform: translate3d(0, 14px, 0); }
+}
+::view-transition-old(root) {
+  animation: rl-page-out 180ms ease-out both;
+}
+::view-transition-new(root) {
+  animation: rl-page-in 420ms cubic-bezier(0.22, 1, 0.36, 1) 60ms both;
+}
+@keyframes rl-icon-out {
+  to { opacity: 0; transform: scale(0.2); }
+}
+@keyframes rl-icon-in {
+  from { opacity: 0; transform: scale(0.2); }
+}
+::view-transition-old(service-icon-card),
+::view-transition-old(service-icon-page) {
+  animation: rl-icon-out 220ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+::view-transition-new(service-icon-card),
+::view-transition-new(service-icon-page) {
+  /* a slight overshoot so it lands with a soft pop */
+  animation: rl-icon-in 420ms cubic-bezier(0.34, 1.56, 0.64, 1) 200ms both;
+}
+::view-transition-group(site-nav) {
+  animation-duration: 300ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

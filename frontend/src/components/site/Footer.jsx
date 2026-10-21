@@ -9,8 +9,7 @@ export const Footer = () => (
         <div>
           <Logo light />
           <p className="mt-4 max-w-xs text-sm font-light text-white/55">
-            AI-driven editing, imagery, motion, and web design for high-end
-            brands.
+            AI video, editing, clipping and thumbnails for creators and brands.
           </p>
         </div>
 
