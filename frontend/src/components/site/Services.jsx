@@ -1,19 +1,17 @@
 import { Link, useViewTransitionState } from "react-router-dom";
 import {
   ArrowRight,
-  TrendingUp,
   Scissors,
   Clapperboard,
   MousePointerClick,
   Orbit,
   Megaphone,
   Sparkles,
-  LayoutTemplate,
 } from "lucide-react";
 import { SERVICES } from "@/data/content";
 import { Reveal } from "./Reveal";
 
-export const ICONS = { TrendingUp, Scissors, Clapperboard, MousePointerClick, Orbit, Megaphone, Sparkles, LayoutTemplate };
+export const ICONS = { Scissors, Clapperboard, MousePointerClick, Orbit, Megaphone, Sparkles };
 
 // `morph`: during the page transition this card's icon shrinks away here and the
 // service page's icon pops up in its header (and the reverse on the way back).
@@ -74,9 +72,9 @@ export const Services = () => (
         </h2>
       </Reveal>
 
-      <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+      <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
         {SERVICES.map((s, i) => (
-          <Reveal key={s.key} delay={(i % 4) * 0.06}>
+          <Reveal key={s.key} delay={(i % 3) * 0.06}>
             {s.sections ? (
               <LinkedCard s={s} i={i} />
             ) : (

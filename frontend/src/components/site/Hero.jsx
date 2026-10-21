@@ -91,7 +91,8 @@ export const Hero = () => {
   const scrollTo = (href) => {
     const el = document.querySelector(href);
     if (!el) return;
-    if (window.lenis) window.lenis.scrollTo(el, { offset: -80 });
+    // No extra offset: Lenis already honours the page's scroll-padding-top (navbar height).
+    if (window.lenis) window.lenis.scrollTo(el);
     else el.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" });
   };
 

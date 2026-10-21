@@ -1,9 +1,13 @@
+import { Link } from "react-router-dom";
 import { LOGO } from "@/data/content";
 
+// Footer logo: goes to the top of the homepage from any page (was "#home",
+// which did nothing on the service pages).
 export const Logo = ({ size = 36, showWord = true, light = false }) => (
-  <a
-    href="#home"
-    data-testid="nav-logo"
+  <Link
+    to="/"
+    viewTransition
+    data-testid="footer-logo"
     className="flex items-center gap-3 group"
   >
     <span
@@ -25,7 +29,7 @@ export const Logo = ({ size = 36, showWord = true, light = false }) => (
         Renderlab
       </span>
     )}
-  </a>
+  </Link>
 );
 
 export default Logo;

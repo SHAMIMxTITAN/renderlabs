@@ -12,30 +12,23 @@ export const CONTACT = {
 };
 
 // `sections` = what the service's own page (/services/<key>) shows. A service
-// without sections has no page yet, so its card isn't clickable.
+// without sections has no page yet, so its card isn't clickable. Services with
+// work come first. Adding `sections` to a service is all it takes to give it a
+// page: the build also creates its file for Render (scripts/route-pages.js).
 export const SERVICES = [
-  { key: "faceless", icon: "TrendingUp", title: "Faceless Channels", copy: "Hooks, scripts, edits. We grow it.", sections: ["channels", "results", "short", "long"] },
-  { key: "clipping", icon: "Scissors", title: "Clipping", copy: "Long videos into daily Shorts." },
   { key: "editing", icon: "Clapperboard", title: "AI Video Editing", copy: "Shorts and long-form, fast.", sections: ["short", "long"] },
   { key: "thumbnails", icon: "MousePointerClick", title: "Thumbnails", copy: "Designed to get the click.", sections: ["thumbnails"] },
   { key: "motion", icon: "Orbit", title: "AI Motion Graphics", copy: "2D and 3D motion for brands.", sections: ["motion"] },
-  { key: "ads", icon: "Megaphone", title: "Ads in a Day", copy: "Short ads, delivered next day." },
   { key: "images", icon: "Sparkles", title: "Realistic AI Images", copy: "Product shots, no studio.", sections: ["images"] },
-  { key: "web", icon: "LayoutTemplate", title: "Landing Pages", copy: "Premium pages that convert." },
+  { key: "clipping", icon: "Scissors", title: "Clipping", copy: "Long videos into daily Shorts." },
+  { key: "ads", icon: "Megaphone", title: "Ads in a Day", copy: "Short ads, delivered next day." },
 ];
 
-// Faceless channels we run, shown as logos on the Faceless Channels page. Add one
-// entry per channel: logo in public/channels/ (square, ~256px WebP), `url` is where
-// the logo links, `instagram` is optional.
+// Our own channels, shown as clickable logos in the "We grew our own channel first"
+// section. One entry per channel: logo in public/channels/ (square, ~256px WebP),
+// `url` is where the logo links.
 export const CHANNELS = [
-  {
-    key: "pixden",
-    name: "Pixden",
-    niche: "Gaming",
-    logo: "/channels/pixden.webp",
-    url: "https://www.youtube.com/@pixden-z8m",
-    instagram: "https://www.instagram.com/pixden.gaming/",
-  },
+  { key: "pixden", name: "Pixden", logo: "/channels/pixden.webp", url: "https://www.youtube.com/@pixden-z8m" },
 ];
 
 // Live public YouTube counts. Re-fetch before changing any number here and
@@ -43,8 +36,6 @@ export const CHANNELS = [
 export const STATS_AS_OF = "21 Oct 2026";
 
 export const RESULTS = {
-  channel: "Pixden",
-  channelUrl: "https://www.youtube.com/@pixden-z8m",
   stats: [
     { value: "2.17M", label: "views on one Short" },
     { value: "22×", label: "median views per Short" },
@@ -57,7 +48,8 @@ export const RESULTS = {
 export const ytThumb = (id) => `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`;
 
 // The portfolio tabs. An item is one of: youtubeId (plays in a pop-up),
-// instagramId (opens on Instagram), video + poster (plays in a pop-up), image (static).
+// instagramId (opens on Instagram), video + poster (plays in a pop-up), image
+// (static, no view count).
 export const WORK_TABS = [
   {
     key: "short",
@@ -84,8 +76,8 @@ export const WORK_TABS = [
     label: "Thumbnail design",
     shape: "wide",
     items: [
-      { id: "th-sf-lore", image: ytThumb("ZFBLyiZNlAM"), title: "Street Fighter lore", views: "68K views" },
-      { id: "th-dhalsim", image: ytThumb("jX8-VkaobmM"), title: "Dhalsim: the complete story", views: "62K views" },
+      { id: "th-sf-lore", image: ytThumb("ZFBLyiZNlAM"), title: "Street Fighter lore" },
+      { id: "th-dhalsim", image: ytThumb("jX8-VkaobmM"), title: "Dhalsim: the complete story" },
     ],
   },
 ];

@@ -1,12 +1,11 @@
 import { Link, Navigate, useParams } from "react-router-dom";
-import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
-import { CHANNELS, IMAGERY, MOTION, SERVICES, STATS_AS_OF, WORK_TABS } from "@/data/content";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { IMAGERY, MOTION, SERVICES, STATS_AS_OF, WORK_TABS } from "@/data/content";
 import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
 import { Grain } from "@/components/site/Grain";
-import { Results } from "@/components/site/Results";
 import { ICONS } from "@/components/site/Services";
-import { WorkGallery } from "@/components/site/Work";
+import { hasLiveViews, WorkGallery } from "@/components/site/Work";
 import { Reveal } from "@/components/site/Reveal";
 
 const GALLERIES = [...WORK_TABS, MOTION];
@@ -23,39 +22,6 @@ const Block = ({ title, note, children }) => (
 
 // Pages with one gallery skip its heading; the page title already names it.
 const Section = ({ name, titled }) => {
-  if (name === "results") return <Results />;
-  if (name === "channels") {
-    return (
-      <Block title={titled && "Our channels"}>
-        <ul className="mt-8 flex flex-wrap gap-8 md:gap-10">
-          {CHANNELS.map((c) => (
-            <li key={c.key} className="flex flex-col items-center text-center">
-              <a href={c.url} target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center">
-                <span className="block h-24 w-24 md:h-28 md:w-28 overflow-hidden rounded-full ring-1 ring-black/10 transition-transform duration-300 group-hover:-translate-y-1">
-                  <img src={c.logo} alt={`${c.name} logo`} width="112" height="112" decoding="async" className="h-full w-full object-cover" />
-                </span>
-                <span className="mt-3 inline-flex items-center gap-1 font-display font-semibold text-[#111111]">
-                  {c.name} <ArrowUpRight size={14} className="text-[#4b5563] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </span>
-                <span className="sr-only">(opens the channel)</span>
-              </a>
-              <span className="mt-0.5 text-sm text-[var(--rl-muted)]">
-                {c.niche}
-                {c.instagram && (
-                  <>
-                    {" · "}
-                    <a href={c.instagram} target="_blank" rel="noopener noreferrer" className="underline-offset-2 hover:underline hover:text-[#111111]">
-                      Instagram
-                    </a>
-                  </>
-                )}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </Block>
-    );
-  }
   if (name === "images") {
     return (
       <Block title={titled && "Realistic AI images"}>
@@ -68,7 +34,7 @@ const Section = ({ name, titled }) => {
     );
   }
   const tab = GALLERIES.find((t) => t.key === name);
-  const note = tab === MOTION ? null : `Live YouTube and Instagram views, ${STATS_AS_OF}.`;
+  const note = hasLiveViews(tab) ? `Live YouTube and Instagram views, ${STATS_AS_OF}.` : null;
   return (
     <Block title={titled && tab.label} note={note}>
       <WorkGallery tab={tab} className={titled ? "mt-8" : ""} />

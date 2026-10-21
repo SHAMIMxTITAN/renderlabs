@@ -1,5 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
-import { RESULTS, STATS_AS_OF } from "@/data/content";
+import { CHANNELS, RESULTS, STATS_AS_OF } from "@/data/content";
 import { Reveal } from "./Reveal";
 
 export const Results = () => (
@@ -11,14 +11,25 @@ export const Results = () => (
           <h2 className="font-display font-extrabold tracking-[-0.03em] text-4xl md:text-6xl leading-[0.98]">
             We grew our own channel <span className="text-[#3b82f6]">first.</span>
           </h2>
-          <a
-            href={RESULTS.channelUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-8 inline-flex items-center gap-1.5 text-sm font-medium text-white/80 hover:text-white border-b border-white/30 hover:border-white pb-0.5 transition-colors"
-          >
-            {RESULTS.channel} on YouTube <ArrowUpRight size={15} />
-          </a>
+          {/* Each channel is its logo; clicking it opens the channel. */}
+          <ul className="mt-8 flex flex-wrap gap-6">
+            {CHANNELS.map((c) => (
+              <li key={c.key}>
+                <a href={c.url} target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-3">
+                  <span className="block h-14 w-14 md:h-16 md:w-16 overflow-hidden rounded-full ring-2 ring-white/15 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:ring-white/40">
+                    <img src={c.logo} alt={`${c.name} logo`} width="64" height="64" decoding="async" className="h-full w-full object-cover" />
+                  </span>
+                  <span className="text-left leading-tight">
+                    <span className="block font-display font-bold text-lg">{c.name}</span>
+                    <span className="inline-flex items-center gap-1 text-sm text-white/60 group-hover:text-white transition-colors">
+                      YouTube <ArrowUpRight size={14} />
+                    </span>
+                  </span>
+                  <span className="sr-only">(opens the channel)</span>
+                </a>
+              </li>
+            ))}
+          </ul>
         </Reveal>
 
         <Reveal delay={0.08} className="lg:col-span-6">

@@ -50,21 +50,13 @@ test("gallery pause exposes every original for keyboard scrolling and resume res
   expect(container.querySelectorAll("img")).toHaveLength(IMAGERY.length * 2);
 });
 
-test("ticker pause and resume work through its persistent native button", () => {
+test("ticker runs non-stop with no pause control", () => {
   act(() => root.render(<KineticDivider />));
-  const button = container.querySelector("button");
-  const track = container.querySelector("#services-ticker");
-  act(() => button.click());
-  expect(button.textContent).toBe("Resume ticker");
-  expect(button.getAttribute("aria-pressed")).toBe("true");
-  expect(track.style.animationPlayState).toBe("paused");
-  act(() => button.click());
-  expect(button.textContent).toBe("Pause ticker");
-  expect(button.getAttribute("aria-pressed")).toBe("false");
-  expect(track.style.animationPlayState).toBe("running");
+  expect(container.querySelector("button")).toBeNull();
+  expect(container.querySelector("#services-ticker").style.animationPlayState).toBe("running");
 });
 
-test("reduced motion starts both controls stopped and keeps all imagery reachable", () => {
+test("reduced motion stops the gallery and ticker and keeps all imagery reachable", () => {
   mockReducedMotion = true;
   act(() => root.render(<><Imagery /><KineticDivider /></>));
   const buttons = container.querySelectorAll("button");

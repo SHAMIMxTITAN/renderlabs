@@ -41,7 +41,8 @@ export const Navbar = ({ solid = false }) => {
     const el = document.querySelector(href);
     // Not on the homepage: go there; ScrollRestoration scrolls to the hash.
     if (!el) return navigate(href === "#home" ? "/" : `/${href}`, { viewTransition: true });
-    if (window.lenis && !reducedMotion) window.lenis.scrollTo(el, { offset: -80 });
+    // No extra offset: Lenis already honours the page's scroll-padding-top (navbar height).
+    if (window.lenis && !reducedMotion) window.lenis.scrollTo(el);
     else el.scrollIntoView({ behavior: reducedMotion ? "instant" : "smooth" });
   };
 

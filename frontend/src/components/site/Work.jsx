@@ -10,7 +10,7 @@ const Caption = ({ w }) => (
 );
 
 // The view count is the headline, so it sits on the video as the play button.
-// `corner`: the compact version that sits in a card's corner (long-form, thumbnails).
+// `corner`: the compact version that sits in a long-form card's corner.
 const ViewsPill = ({ w, play, corner }) => (
   <span
     className={`inline-flex items-center gap-1.5 md:gap-2 whitespace-nowrap rounded-full bg-white font-display font-bold text-[#111111] shadow-[0_10px_30px_-10px_rgba(0,0,0,0.5)] ${
@@ -23,6 +23,8 @@ const ViewsPill = ({ w, play, corner }) => (
 );
 
 const platform = (w) => (w.instagramId ? "Instagram" : "YouTube");
+// Only YouTube/Instagram items carry public view counts (and the "as of" note).
+export const hasLiveViews = (tab) => tab.items.some((w) => w.youtubeId || w.instagramId);
 
 // The real YouTube play-button mark (shape from Simple Icons, CC0), inline so it costs no request.
 const YouTubeMark = () => (
@@ -79,9 +81,8 @@ export const WorkGallery = ({ tab, className = "mt-12" }) => {
     if (w.image) {
       return (
         <figure key={w.id} data-testid={`work-item-${w.id}`}>
-          <div className="relative overflow-hidden rounded-2xl border border-[#eceef0] bg-[#f7f7f7] aspect-video">
+          <div className="overflow-hidden rounded-2xl border border-[#eceef0] bg-[#f7f7f7] aspect-video">
             <img src={w.image} alt={`${w.title} thumbnail`} loading="lazy" decoding="async" className="w-full h-full object-cover" />
-            <span className="absolute left-3 bottom-3"><ViewsPill w={w} corner /></span>
           </div>
           <figcaption><Caption w={w} /></figcaption>
         </figure>
@@ -228,7 +229,7 @@ export const Work = () => {
 
         <WorkGallery key={tab.key} tab={tab} />
 
-        <p className="mt-6 text-xs text-[var(--rl-muted)]">Live YouTube and Instagram views, {STATS_AS_OF}.</p>
+        {hasLiveViews(tab) && <p className="mt-6 text-xs text-[var(--rl-muted)]">Live YouTube and Instagram views, {STATS_AS_OF}.</p>}
       </div>
     </section>
   );

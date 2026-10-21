@@ -107,11 +107,10 @@ html {
    roundness matches the old circular corners. Pills and circles (rounded-full) stay
    round. The 2px-ringed Work panels keep inner = outer - 2px so the ring stays even. */
 @supports (corner-shape: superellipse(1.5)) {
-  .rounded-lg,
-  .rounded-xl,
-  .rounded-2xl,
-  .rounded-3xl,
-  .rounded-\[22px\] {
+  /* Only solid shapes (tiles, cards, form, buttons). Clipping photos or video to a
+     superellipse is slow to raster: it made page transitions hitch ~60ms, so
+     anything holding an img/video/iframe keeps the plain (GPU-cheap) round corner. */
+  :is(.rounded-lg, .rounded-xl, .rounded-2xl, .rounded-3xl, .rounded-\[22px\]):not(:has(img, video, iframe)) {
     corner-shape: superellipse(1.5);
   }
   .rounded-lg { border-radius: calc(var(--radius) * 1.25); }
